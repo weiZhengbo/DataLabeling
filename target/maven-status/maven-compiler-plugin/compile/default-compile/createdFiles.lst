@@ -1,0 +1,5 @@
+com\dataLabeling\dao\speechTagMapper.class
+com\dataLabeling\controller\SpeechTagController.class
+com\dataLabeling\controller\MainController.class
+com\dataLabeling\service\ISpeechTagService.class
+com\dataLabeling\service\impl\SpeechTagService.class
