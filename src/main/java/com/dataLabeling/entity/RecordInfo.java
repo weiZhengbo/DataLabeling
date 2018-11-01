@@ -14,13 +14,16 @@ public class RecordInfo {
     private String fileName;
     //访客记录文本
     private String chatRecord;
+    //访客记录文本md5
+    private String recordMd5;
     //访客记录文本类别
     private String recordClass;
     //访客记录相似类别
     private String similarClass;
     //原始时间戳
     private Date recordTime;
-
+    //对应的appID
+    private Integer appFlag;
     @Override
     public String toString() {
         return "RecordInfo{" +
@@ -88,5 +91,21 @@ public class RecordInfo {
 
     public void setRecordTime(Date recordTime) {
         this.recordTime = recordTime;
+    }
+
+    public Integer getAppFlag() {
+        return appFlag;
+    }
+
+    public void setAppFlag(Integer appFlag) {
+        this.appFlag = appFlag;
+    }
+
+    public String getRecordMd5() {
+        return recordMd5;
+    }
+
+    public void setRecordMd5(String recordMd5) {
+        this.recordMd5 = recordMd5;
     }
 }

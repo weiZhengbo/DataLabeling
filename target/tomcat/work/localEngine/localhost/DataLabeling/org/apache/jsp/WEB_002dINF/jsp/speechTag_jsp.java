@@ -60,7 +60,7 @@ public final class speechTag_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<title>Insert title here</title>\r\n");
       out.write("</head>\r\n");
       out.write("<body>\r\n");
-      out.write("HELLO WORLD!!\r\n");
+      out.write("HELLO\r\n");
       out.write("</body>\r\n");
       out.write("</html>");
     } catch (Throwable t) {

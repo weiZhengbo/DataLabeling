@@ -8,6 +8,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-HELLO WORLD!!
+<form name="form" action="fileUpload.action" method="post"  enctype="multipart/form-data" >
+    <input type="hidden" value="-1" name="appFlag">
+    <input type="file" name="file">
+    <input type="submit" value="upload"/>
+</form>
 </body>
 </html>

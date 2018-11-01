@@ -1,40 +1,81 @@
 package com.dataLabeling.controller;
 
-import com.dataLabeling.service.impl.SpeechTagService;
+import com.dataLabeling.entity.RecordInfo;
+import com.dataLabeling.service.impl.EntityTagService;
+import com.dataLabeling.util.FileReadUtil;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.util.Span;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 /**
  * Created by wzb on 2018/10/29.
  */
 
 @Controller
-@RequestMapping("/speechTag")
-public class SpeechTagController {
+@RequestMapping("/entityTag")
+public class EntityTagController {
 
     @Autowired
-    private SpeechTagService speechTagService;
+    private EntityTagService entityTagService;
 
+    private RecordInfo recordInfo;
 
     @RequestMapping("/list")
     public String getList(){
-        speechTagService.getAllProject();
+        entityTagService.getAllProject();
 
-        return "speechTag";
+        return "entityTag";
     }
 
+    /*
+     * 上传文件
+     */
+    @RequestMapping("/fileUpload")
+    public String  fileUpload(@RequestParam("file") CommonsMultipartFile file, ModelMap map,@RequestParam("appFlag") Integer appFlag) throws IOException {
+        DiskFileItem fi = (DiskFileItem)file.getFileItem();
+        RecordInfo recordInfo = new RecordInfo();
+        File f = fi.getStoreLocation();
+        String[] list;
+        String result=null;
+        String fileName = file.getOriginalFilename();
+        if(fileName.endsWith("txt")){
+            result=FileReadUtil.readTxt(f);
+        }else if(fileName.endsWith("xls") || fileName.endsWith("xlsx")) {
+            FileReadUtil.readExcel(f);
+        }else{
+            map.addAttribute("message","文件类型不正确！");
+        }
+        recordInfo.setAppFlag(appFlag);
+        recordInfo.setFileName(fileName);
+       list = result.split("[。?!]");
+        for(String i : list){
+            System.out.println(i);
+        }
+        entityTagService.saveFileContent(list,recordInfo);
+        return "";
+    }
 
+    @RequestMapping("/noTaglist")
+    public String noTaglist(@RequestParam("appFlag") Integer appFlag, ModelMap map){
+        map.addAttribute("recordClassList",entityTagService.getNoTagList(appFlag));
+        return "entityTagList";
+    }
 
     @Test
         public  void main() throws Exception {
@@ -67,4 +108,12 @@ public class SpeechTagController {
             }
         }
 
+
+    public RecordInfo getRecordInfo() {
+        return recordInfo;
+    }
+
+    public void setRecordInfo(RecordInfo recordInfo) {
+        this.recordInfo = recordInfo;
+    }
 }
