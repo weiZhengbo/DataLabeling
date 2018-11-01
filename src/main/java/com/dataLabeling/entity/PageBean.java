@@ -7,22 +7,17 @@ import java.util.List;
  */
 public class PageBean<T> {
     private int pc;//上面表格当前页码 page code
-    private int pc1;//下面表格当前页码
     //    private int tp;//总页数 total page
     private int tr;//上面表格总记录数 total record
-    private int tr1;//下面表格总记录数
     private int ps;//上面表格每页记录数 page size
     private int ps1;//下面表格的每页记录数
     private List<RecordInfo> beanListUp;//上面表格当前页的记录
     private List<RecordInfo> beanListDown;//下面表格当前页的记录
     private T TClass;//用户点击的相似记录模板
-    private String url;//获得url中方法名条件
     private List<T> TClasses;//所有相似记录模板
     private String keyword;//用户输入的搜索关键字
     private Integer appId;//应用id
-    private String dataType;//全量数据(all)还是未标注数据(notdeal)
-    private Integer notDealedNum;
-    private Integer totalNum;
+    private String dataType;//已处理数据(dealed)还是未标注数据(notdeal)
     private String noHandledWord;//相似性 搜索的未处理的关键字
 
     public PageBean() {
@@ -40,42 +35,14 @@ public class PageBean<T> {
      * 计算TP
      * @return
      */
+    public int getTp1() {
+        int tp = tr/ps1;
+        return tr%ps1==0?tp:tp+1;
+    }
+
     public int getTp() {
         int tp = tr/ps;
         return tr%ps==0?tp:tp+1;
-    }
-    public int getTp1() {
-        int tp1 = tr1/ps1;
-        return tr1%ps1==0?tp1:tp1+1;
-    }
-
-//    public void setTp(int tp) {
-//        this.tp = tp;
-//    }
-
-
-    public Integer getNotDealedNum() {
-        return notDealedNum;
-    }
-
-    public void setNotDealedNum(Integer notDealedNum) {
-        this.notDealedNum = notDealedNum;
-    }
-
-    public Integer getTotalNum() {
-        return totalNum;
-    }
-
-    public void setTotalNum(Integer totalNum) {
-        this.totalNum = totalNum;
-    }
-
-    public int getPc1() {
-        return pc1;
-    }
-
-    public void setPc1(int pc1) {
-        this.pc1 = pc1;
     }
 
     public int getTr() {
@@ -84,14 +51,6 @@ public class PageBean<T> {
 
     public void setTr(int tr) {
         this.tr = tr;
-    }
-
-    public int getTr1() {
-        return tr1;
-    }
-
-    public void setTr1(int tr1) {
-        this.tr1 = tr1;
     }
 
     public int getPs() {
@@ -132,14 +91,6 @@ public class PageBean<T> {
 
     public void setTClass(T TClass) {
         this.TClass = TClass;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public List<T> getTClasses() {

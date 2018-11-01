@@ -1,11 +1,4 @@
 $(document).ready(function () {
-    var url  = decodeURI(window.location.search.substr(1));
-    var appId = getQueryString(url,'appId');
-    if(appId == ''||appId == null){
-        $('.mynav').children().first().addClass('active');
-    }else {
-        $('.mynav').find('#' + appId).addClass('active');
-    }
     var choosedIds = sessionStorage.getItem('choosedIds');
     if(choosedIds==null||choosedIds==''){
         $('#choosedSpan').text('已选择类别：无');
@@ -14,7 +7,7 @@ $(document).ready(function () {
         for(var i=0;i<ids.length;i++){
             $('.colorFulTag').find('#sid'+ids[i]).css('background-color','bisque');
         }
-        $('#choosedSpan').text('已选择类别'+choosedIds);
+        $('#choosedSpan').text('已选择类别:'+choosedIds);
     }
     $('#myModal').on('show.bs.modal', function (event) {
         var clickedId = event.relatedTarget.parentNode.parentNode.childNodes[1].textContent;
@@ -27,8 +20,9 @@ $(document).ready(function () {
         var url  = decodeURI(window.location.search.substr(1));
         var appId = getQueryString(url,'appId');
         var url1  = document.URL;
-        var head = url1.substring(0,url1.lastIndexOf('/'));
-        var reqUrl = head+'/UploadHandleServlet?method=uploadFile&appId='+appId;
+        var head1 = url1.substring(0,url1.lastIndexOf('/'));
+        var head = head1.substring(0,head1.lastIndexOf('/'));
+        var reqUrl = head+'/UploadHandleController/uploadFile?appId='+appId;
         var formData = new FormData();
         formData.append('file', $('#file')[0].files[0]);
         $.ajax({
@@ -41,7 +35,7 @@ $(document).ready(function () {
             clearForm:true,
         }).done(function(res) {
             alert('文件处理成功');
-            getUrl("refresh",0);
+            getUrl("refresh",'no');
         }).fail(function (res) {
         });
     });
@@ -60,6 +54,9 @@ function changeStatus(change, value) {
             newIds.push(value);
         }
         choosedIds=newIds.join(',');
+        if(choosedIds[0]==','){
+            choosedIds=choosedIds.substring(1);
+        }
     }else {
         choosedIds=value;
     }
@@ -71,61 +68,24 @@ function downLoadData(type) {
     var appId = getQueryString(url,'appId');
 
     var url1  = document.URL;
-    var head = url1.substring(0,url1.lastIndexOf('/'));
+    var head1 = url1.substring(0,url1.lastIndexOf('/'));
+    var head = head1.substring(0,head1.lastIndexOf('/'));
     if(type=='1'){
         var choosedIds = sessionStorage.getItem('choosedIds');
         if(choosedIds==null||choosedIds==''){
             alert('未选择类别');
             return;
         }
-        var reqUrl = head+'/DownLoadZipFileServlet?method=downLoadZipFile&appId='+appId+'&downType=1&choosedIds='+choosedIds;
+        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=1&choosedIds='+choosedIds;
         sessionStorage.clear();
         window.location.href=reqUrl;
     }else if(type=='2'){
-        var reqUrl = head+'/DownLoadZipFileServlet?method=downLoadZipFile&appId='+appId+'&downType=2';
+        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=2';
         window.location.href=reqUrl;
     }else {
-        var reqUrl = head+'/DownLoadZipFileServlet?method=downLoadZipFile&appId='+appId+'&downType=3';
+        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=3';
         window.location.href=reqUrl;
     }
-}
-function addNewRecordClassProject(appType) {
-    var appName = prompt("请输入新增的任务名称","");
-    var url1  = document.URL;
-    var url  = decodeURI(window.location.search.substr(1));
-    var pid = getQueryString(url,"pid");
-    var urlHead = url1.substring(0,url1.lastIndexOf('/'));
-    if(appName !=null && appName!=""){
-        if(appType=='1'){
-            appName=appName+'-分类标注';
-        }else if(appType=='2'){
-            appName=appName+'-相似标注';
-        }
-        var reqUrl = urlHead+'/ProjectServlet?method=addNewApplication&pid='+pid+'&appType='+appType+'&appName='+appName;
-        $.get(reqUrl,function (data) {
-            getUrl("refresh",0);
-        });
-    }
-}
-function showAppDetail(appId,that) {
-    sessionStorage.clear();
-    var $li = $(that);
-    $li.parent().find(".active").removeClass();
-    $li.addClass('active');
-    //判断点击的这个是分类标注还是相似标注
-    var str = $li.find('a').text();
-    var laststr = str.substring(str.length-4);
-    var url  = decodeURI(window.location.search.substr(1));
-    var pid = getQueryString(url,'pid');
-    var url1  = document.URL;
-    var urlHead = url1.substring(0,url1.lastIndexOf('/'));
-    if(laststr == '分类标注'){
-        var reqUrl = urlHead+"/RecordServlet?method=findAll&appId="+appId+"&pid="+pid;
-
-    }else if(laststr == '相似标注'){
-        var reqUrl = urlHead+"/SimilarServlet?method=findAll&appId="+appId+"&pid="+pid;
-    }
-    window.location.href=reqUrl
 }
 function drag(event) {
     event.dataTransfer.setData("Text",event.target.id);
@@ -138,17 +98,11 @@ function drop_handler(event) {
     var data = $('#'+tr).children().eq(1).text();
     event.target.textContent=data;
     var rid =event.target.parentNode.firstChild.nextElementSibling.textContent;
-    var url  = decodeURI(window.location.search.substr(1));
     var url1  = document.URL;
-    var appId = getQueryString(url,"appId");
-    var urlHead = url1.substring(0,url1.indexOf('?'));
-    var reqUrl = urlHead+"?method=addRecordClass&rid="+rid+"&sid="+similarId+"&appId="+appId;
+    var urlHead = url1.substring(0,url1.lastIndexOf('/'));
+    var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+similarId;
     $.get(reqUrl,function (data,status) {
         if(data!=null && data!=""){
-            var handled = parseInt($(".Handled").text())+1;
-            var unHandled = parseInt($(".UnHandled").text())-1;
-            $(".Handled").text(handled);
-            $(".UnHandled").text(unHandled);
             event.target.parentNode.lastChild.previousElementSibling.innerHTML="<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>";
         }
     });
@@ -161,43 +115,29 @@ function getUrl(change,value) {
     var url  = decodeURI(window.location.search.substr(1));
     var url1  = document.URL;
     var head = url1.substring(0,url1.indexOf('?'));
-    var method = getQueryString(url,'method');
+
     var pc = getQueryString(url,'pc');
-    var pc1 = getQueryString(url,'pc1');
     var clickwordId = getQueryString(url,'clickwordId');
     var keyword = getQueryString(url,'keyword');
     var appId = getQueryString(url,'appId');
     var dataType = getQueryString(url,'dataType');
-    var pid = getQueryString(url,'pid');
-    var reqUrl = head+'?method='+method;
+
+    var reqUrl = head;
     if (change=='pc'){
-        reqUrl=reqUrl+'&pc='+value;
-        reqUrl=reqUrl+'&pc1='+pc1+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&pid='+pid+'&refresh=1';
-    }else if(change=='pc1'){
-        reqUrl=reqUrl+'&pc1='+value;
-        reqUrl=reqUrl+'&pc='+pc+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&pid='+pid+'&refresh=0';
+        reqUrl=reqUrl+'?pc='+value;
+        reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=yes';
     }else if(change=='clickwordId'){
-        if(dataType=='all'){
-            reqUrl=reqUrl+'&clickwordId='+value;
-            reqUrl=reqUrl+'&pc=1'+'&pc1=1&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&pid='+pid+'&refresh=0';
-        }else {
-            reqUrl=reqUrl+'&clickwordId='+value;
-            reqUrl=reqUrl+'&pc='+pc+'&pc1=1&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&pid='+pid+'&refresh=0';
-        }
-    }else if(change=='keyword'){
-        var $i=$(value);
-        var txt = $i.parents('span').siblings('input').val();
-        reqUrl=reqUrl+'&keyword='+txt;
-        reqUrl=reqUrl+'&pc='+pc+'&clickwordId='+clickwordId+'&pc1='+pc1+"&appId="+appId+"&dataType="+dataType+'&pid='+pid;
+        reqUrl=reqUrl+'?clickwordId='+value;
+        reqUrl=reqUrl+'&pc=1&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=no';
     }else if(change=='dataType'){
         sessionStorage.clear();
-        reqUrl=reqUrl+'&dataType='+value;
-        reqUrl=reqUrl+"&appId="+appId+'&pid='+pid+'&refresh=1';
+        reqUrl=reqUrl+'?dataType='+value;
+        reqUrl=reqUrl+"&appId="+appId+'&refresh=yes';
     }else if (change=='refresh'){
-        reqUrl=reqUrl+'&refresh='+value;
-        reqUrl=reqUrl+'&pc='+pc+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&pid='+pid+'&pc1='+pc1;
+        reqUrl=reqUrl+'?refresh='+value;
+        reqUrl=reqUrl+'&pc='+pc+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType;
     }
-    window.location.href=reqUrl
+    window.location.href=reqUrl;
 }
 function getQueryString(url,name) {
     var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
@@ -217,19 +157,18 @@ function changeChoosed(that) {
 }
 function confimClick() {
     var CCid = $('#CCid').text();
-    var url  = decodeURI(window.location.search.substr(1));
+    var CCText = $('#CCText').text();
     var url1  = document.URL;
-    var appId = getQueryString(url,"appId");
-    var urlHead = url1.substring(0,url1.indexOf('?'));
+    var urlHead = url1.substring(0,url1.lastIndexOf('/'));
     if (CCid==null||CCid==''){
         alert('请选择类别标签');
     }else {
         var rid = $('#clickId').text();
-        var reqUrl = urlHead+"?method=addRecordClass&rid="+rid+"&sid="+CCid+"&appId="+appId;
+        var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+CCid;
         $.get(reqUrl,function (data,status) {
             if(data!=null && data!=""){
-                $('#myModal').modal('hide')
-                $('#rr'+rid).parents('td').siblings('.sclass').text(data);
+                $('#myModal').modal('hide');
+                $('#rr'+rid).parents('td').siblings('.sclass').text(CCText);
                 $('#rr'+rid).parents('td')[0].innerHTML="<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>";
             }
         });
@@ -238,14 +177,10 @@ function confimClick() {
 function similarTagRemove(rid,that) {
     var $i = $(that);
     var url1  = document.URL;
-    var urlHead = url1.substring(0,url1.indexOf('?'));
-    var reqUrl = urlHead+"?method=removeRecordClass&rid="+rid;
+    var urlHead = url1.substring(0,url1.lastIndexOf('/'));
+    var reqUrl = urlHead+"/removeRecordClass?rid="+rid;
     $.get(reqUrl,function (data,status) {
         if(data){
-            var handled = parseInt($(".Handled").text())-1;
-            var unHandled = parseInt($(".UnHandled").text())+1;
-            $(".Handled").text(handled);
-            $(".UnHandled").text(unHandled);
             $i.parents('td').siblings('.sclass').text("");
             $i.parents('td')[0].innerHTML="<i class='glyphicon glyphicon-plus' id='rr"+rid+"' data-toggle='modal' data-target='#myModal'></i>";
         }
@@ -254,16 +189,16 @@ function similarTagRemove(rid,that) {
 function similarTagDelete(sid,similarclass) {
     var r=confirm("确认删除类别标签："+similarclass+"吗？");
     if (r==true) {
-        var url1  = document.URL;
         var url  = decodeURI(window.location.search.substr(1));
+        var url1  = document.URL;
+        var urlHead = url1.substring(0,url1.lastIndexOf('/'));
         var clickwordId = getQueryString(url,"clickwordId");
-        var urlHead = url1.substring(0,url1.indexOf('?'));
-        var reqUrl = urlHead+"?method=deleteRecordClass&sid="+sid;
+        var reqUrl = urlHead+"/deleteRecordClass?sid="+sid;
         $.get(reqUrl,function (data,status) {
             if(clickwordId==sid){
                 getUrl('clickwordId',"");
             }else {
-                getUrl("refresh",0);
+                getUrl("refresh",'no');
             }
         });
     }
@@ -274,10 +209,10 @@ function addClass() {
     var appId = getQueryString(url,"appId");
     if(className!=null && className!=""){
         var url1  = document.URL;
-        var urlHead = url1.substring(0,url1.indexOf('?'));
-        var reqUrl = urlHead+"?method=addnewRecordClass&className="+className+"&appId="+appId;
+        var urlHead = url1.substring(0,url1.lastIndexOf('/'));
+        var reqUrl = urlHead+"/addnewRecordClass?recordClass="+className+"&appId="+appId;
         $.get(reqUrl,function (data) {
-            getUrl('refresh',0);
+            getUrl('refresh','no');
         })
     }
 }

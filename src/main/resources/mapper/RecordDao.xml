@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 写sql语句 -->
+<mapper namespace="com.dataLabeling.dao.RecordDao">
+    <select id="selectCountClicked" resultType="Integer">
+        select count(*) from recordinfo where recordClassId=#{arg0} and appFlag=#{arg1}
+    </select>
+
+    <select id="selectCountDealed" parameterType="Integer" resultType="Integer">
+        select count(*) from recordinfo where recordClassId!=-1 and appFlag=#{appId}
+    </select>
+
+    <select id="selectRecordClassById" parameterType="Integer" resultType="RecordClass">
+        select * from recordclass where id = #{clickwordId}
+    </select>
+
+    <select id="selectNoClickDealedList" resultType="RecordInfo">
+        select recordinfo.*,recordclass.recordClass
+        from recordinfo  join recordclass
+        on recordinfo.recordClassId=recordclass.id
+        where recordinfo.appFlag=#{arg0}
+        order by id limit #{arg1},#{arg2}
+    </select>
+
+    <select id="selectclickedList" resultType="RecordInfo">
+        select recordinfo.*,recordclass.recordClass
+        from recordinfo  join recordclass
+        on recordinfo.recordClassId=recordclass.id
+        where recordclass.id=#{arg0} and recordinfo.appFlag=#{arg1}
+        order by id limit #{arg2},#{arg3}
+    </select>
+
+    <select id="selectNotDealedList" resultType="RecordInfo">
+        select recordinfo.* from recordinfo
+         where recordClassId=-1 and appFlag=#{arg0}
+         order by rand() limit #{arg1}
+    </select>
+
+    <select id="findAllClasses" parameterType="Integer" resultType="RecordClass">
+        select * from recordclass where appFlag=#{appId} order by id
+    </select>
+
+    <select id="findMatchClasses" resultType="RecordClass">
+        select * from recordclass where appFlag=#{arg0} and recordClass like #{arg1} order by id
+    </select>
+
+    <select id="findRecordById" resultType="RecordInfo" parameterType="Integer">
+        select recordinfo.*,recordclass.recordClass from recordinfo left join recordclass on recordinfo.recordClassId=recordclass.id where recordinfo.id=#{id};
+    </select>
+
+    <update id="addClassTag">
+        update recordinfo set recordClassId = #{arg1} where id =  #{arg0}
+    </update>
+
+    <update id="removeRecordClass" parameterType="Integer">
+        update recordinfo set recordClassId = -1 where id = #{rid}
+    </update>
+
+    <update id="deleteBefore" parameterType="Integer">
+        update recordinfo set recordClassId = -1 where recordClassId = #{sid}
+    </update>
+
+    <delete id="deleteRecordClass" parameterType="Integer">
+        delete from recordclass where id = #{sid}
+    </delete>
+
+    <insert id="addnewRecordClass" parameterType="RecordClass" >
+        <selectKey keyProperty="id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id()
+        </selectKey>
+        insert into recordclass(recordClass,appFlag) values(#{recordClass},#{appId})
+    </insert>
+
+    <insert id="addRecordBatch" parameterType="RecordInfo">
+          insert IGNORE into recordinfo(originId,fileName,chatRecord,recordTime,recordMd5,appFlag) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.originId},#{item.fileName},#{item.chatRecord},#{item.recordTime},#{item.recordMd5},#{item.appId})
+        </foreach>
+    </insert>
+
+    <select id="selectDealedById" resultType="java.util.HashMap">
+        select recordinfo.id,recordinfo.originId,recordinfo.fileName,recordinfo.chatRecord,recordinfo.recordTime,recordclass.recordClass
+        from recordinfo join recordclass
+        on recordinfo.recordClassId = recordclass.id
+        where recordclass.id=#{val}  order by recordinfo.id
+    </select>
+
+    <select id="selectAllData" resultType="java.util.HashMap">
+        select recordinfo.id,recordinfo.originId,recordinfo.fileName,recordinfo.chatRecord,recordinfo.recordTime,recordclass.recordClass
+        from recordinfo left join recordclass
+        on recordinfo.recordClassId = recordclass.id
+        where recordinfo.appFlag = #{appId}  order by recordinfo.id
+    </select>
+
+    <select id="selectAllDealedData" resultType="java.util.HashMap">
+        select recordinfo.id,recordinfo.originId,recordinfo.fileName,recordinfo.chatRecord,recordinfo.recordTime,recordclass.recordClass
+        from recordinfo join recordclass
+        on recordinfo.recordClassId = recordclass.id
+        where recordinfo.appFlag = #{appId}  order by recordinfo.id
+    </select>
+</mapper>
