@@ -21,6 +21,9 @@ public class RecordInfo {
     //原始时间戳
     private Date recordTime;
 
+    private String recordMd5;
+
+    private Integer appId;
     @Override
     public String toString() {
         return "RecordInfo{" +
@@ -88,5 +91,21 @@ public class RecordInfo {
 
     public void setRecordTime(Date recordTime) {
         this.recordTime = recordTime;
+    }
+
+    public String getRecordMd5() {
+        return recordMd5;
+    }
+
+    public void setRecordMd5(String recordMd5) {
+        this.recordMd5 = recordMd5;
+    }
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
     }
 }
