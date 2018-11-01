@@ -5,22 +5,22 @@
 
 	<insert id="saveFileContent" useGeneratedKeys="true">
 
-        insert into recordinfo(chatRecord, fileName, recordMd5, recordTime, appFlag) values (
+        insert into recordinfo(chatRecord, fileName, recordMd5, recordTime, appId) values (
           #{chatRecord,jdbcType=VARCHAR},
            #{fileName,jdbcType=VARCHAR},
            #{recordMd5,jdbcType=VARCHAR},
           sysdate(),
-           #{appFlag}
+           #{appId}
         )
     </insert>
 
     <!--根据Md5查询-->
-    <select id="getCountByMd5">
-        select count(1) from recordinfo where recordMd5= #{recordMd5 } and appFlag = #{appFlag}
+    <select id="getCountByMd5" resultType="Integer">
+        select count(1) from recordinfo where recordMd5= #{md5 } and appId = #{appId}
     </select>
 
     <!--查询未标记文本-->
     <select id="getNoTagList" resultType="com.dataLabeling.entity.RecordInfo">
-        select * from recordinfo where appFlag=#{appFlag} and recordClassId = '-1'
+        select * from recordinfo where appId=#{appId} and recordClassId = '-1'
     </select>
 </mapper>

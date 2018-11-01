@@ -2,7 +2,6 @@ package com.dataLabeling.controller;
 
 import com.dataLabeling.entity.Project;
 import com.dataLabeling.service.ProjectService;
-import com.dataLabeling.service.impl.SpeechTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +16,6 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    @Autowired
-    private SpeechTagService speechTagService;
     @Autowired
     private ProjectService projectService;
 

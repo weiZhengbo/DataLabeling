@@ -1,8 +1,13 @@
 package com.dataLabeling.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.*;
 
 public class FileReadUtil {
 
@@ -22,8 +27,36 @@ public class FileReadUtil {
         return result.toString().trim();
     }
 
-    public static void readExcel(File file){
+    public static String readExcel(File file) throws IOException {
+        String fileName = file.getName();
+        StringBuilder result = new StringBuilder();
+        Workbook wb;
+        //根据文件后缀（xls/xlsx）进行判断
+        if ( fileName.endsWith("xls")  || fileName.endsWith("csv")){
+            FileInputStream fiStream = new FileInputStream(file);   //文件流对象
+            wb = new HSSFWorkbook(fiStream);
+        }else{
+            wb = new XSSFWorkbook(new FileInputStream(file));
+        }
+        //开始解析
+        Sheet sheet = wb.getSheetAt(0);     //读取sheet 0
+        int firstRowIndex = sheet.getFirstRowNum();
+        int lastRowIndex = sheet.getLastRowNum();
 
-
+        for(int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
+            Row row = sheet.getRow(rIndex);
+            if (row != null) {
+                int firstCellIndex = row.getFirstCellNum();
+                //int lastCellIndex = row.getLastCellNum();
+             //   for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {   //遍历列
+                    Cell cell = row.getCell(firstCellIndex);
+                    if (cell != null) {
+                        System.out.print(cell.toString() + "    ");
+                    }
+                //}
+                System.out.println("");
+            }
+        }
+        return result.toString();
     }
 }
