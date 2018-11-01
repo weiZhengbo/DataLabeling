@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CSVReader{
+    //读csv文件进行处理
     public void read(File file,Integer appId,RecordService recordService){
         ArrayList<RecordInfo> chatInfoparts = new ArrayList<>();
         String filePath = file.getAbsolutePath();

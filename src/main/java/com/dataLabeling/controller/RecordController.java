@@ -21,6 +21,12 @@ public class RecordController {
     @Autowired
     private HttpServletRequest req; //自动注入request
 
+    /**
+     * 请求数据，用于页面展示
+     * @param vo
+     * @param model
+     * @return
+     */
     @RequestMapping("/findAll")
     public String findAll(QueryVO vo, Model model){
         PageBean<RecordClass> pb = new PageBean<>();
@@ -94,22 +100,46 @@ public class RecordController {
         return "listRecord";
     }
 
+    /**
+     * 为某个record添加类别
+     * @param rid
+     * @param sid
+     * @return
+     */
     @RequestMapping("/addRecordClass")
     @ResponseBody
     public Boolean addRecordClass(Integer rid,Integer sid){
         Boolean b = recordService.addClassTag(rid, sid);
         return b;
     }
+
+    /**
+     * 将某个record的类别移除
+     * @param rid
+     * @return
+     */
     @RequestMapping("/removeRecordClass")
     @ResponseBody
     public Boolean removeRecordClass(Integer rid){
         return recordService.removeRecordClass(rid);
     }
+
+    /**
+     * 删除recordclass的
+     * @param sid
+     * @return
+     */
     @RequestMapping("/deleteRecordClass")
     @ResponseBody
     public Boolean deleteRecordClass(Integer sid){
         return recordService.deleteRecordClass(sid);
     }
+
+    /**
+     * 添加新的recordClass
+     * @param recordClass
+     * @return
+     */
     @RequestMapping("/addnewRecordClass")
     @ResponseBody
     public RecordClass addnewRecordClass(RecordClass recordClass){

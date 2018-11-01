@@ -4,6 +4,7 @@ import com.dataLabeling.service.RecordService;
 
 import java.io.File;
 
+//上传和处理文件工具类
 public class UploadFileProcess {
     private static ExcelReader excelReader = new ExcelReader();
     private static CSVReader csvReader = new CSVReader();

@@ -1,6 +1,7 @@
 package com.dataLabeling.util;
 
-import com.dataLabeling.dao.RecordDao;
+import com.dataLabeling.entity.RecordClass;
+import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
 
 import java.io.File;
@@ -13,7 +14,6 @@ import java.util.Map;
 
 
 public class Store {
-//    private static SimilarDao similarDao = new SimilarDao();
 
     /**
      * 存储info.txt文件
@@ -63,10 +63,10 @@ public class Store {
     }
 
     /**
-     * 存储similar.txt文件
+     * 下载similar.txt文件
      *
      */
-    /*public static void storeSimilar(String storedataDir,Integer appId,String downType,String param){
+    public static void storeSimilar(String storedataDir, int appId, String downType, String param, RecordService recordService) {
         File dir = new File(storedataDir);
         if (!dir.exists() && !dir.isDirectory()) {
             //创建目录
@@ -80,17 +80,22 @@ public class Store {
                 file.delete();
             }
             PrintWriter similarWriter = new PrintWriter(similarPath, "UTF-8");
-            List<Integer> allSimilarId = null;
+            List<Integer> allSimilarId =  new ArrayList<>();
             if (downType.equals("1")){
-               allSimilarId = new ArrayList<>();
-               allSimilarId.add(Integer.parseInt(param));
+                allSimilarId.add(Integer.parseInt(param));
             }else if (downType.equals("2")){
-               allSimilarId = similarDao.findMatchSimilarId(appId,param);
+                List<RecordClass> matchClasses = recordService.findMatchClasses(appId, param);
+                for (RecordClass recordClass:matchClasses){
+                    allSimilarId.add(recordClass.getId());
+                }
             }else if (downType.equals("3")){
-                allSimilarId = similarDao.findAllSimilarId(appId);
+                List<RecordClass> allClasses = recordService.findAllClasses(appId);
+                for (RecordClass recordClass:allClasses){
+                    allSimilarId.add(recordClass.getId());
+                }
             }
             for (Integer sid:allSimilarId){
-                List<RecordInfo> similarClassRecord = similarDao.getSimilarClassRecord(sid);
+                List<RecordInfo> similarClassRecord = recordService.findRecordsById(sid);
                 for (int i=0;i<similarClassRecord.size();i++){
                     for (int j=i+1;j<similarClassRecord.size();j++){
                         similarWriter.println("1\t"+similarClassRecord.get(i).getChatRecord()+"\t"+similarClassRecord.get(j).getChatRecord());
@@ -103,6 +108,8 @@ public class Store {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-    }*/
+    }
+
+
 
 }

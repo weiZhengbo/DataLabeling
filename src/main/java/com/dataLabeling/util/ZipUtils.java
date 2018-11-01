@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * zip工具包
+ */
 public class ZipUtils {
 
     private ZipUtils(){

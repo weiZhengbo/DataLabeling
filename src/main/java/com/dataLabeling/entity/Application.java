@@ -1,10 +1,13 @@
 package com.dataLabeling.entity;
 
+/**
+ * Application实体类
+ */
 public class Application {
-    private Integer id;
-    private String appName;
-    private Integer projectId;
-    private Integer appType;
+    private Integer id;//应用id
+    private String appName;//应用名称
+    private Integer projectId;//所属的projectid
+    private Integer appType;//应用的类型
 
     public Integer getId() {
         return id;

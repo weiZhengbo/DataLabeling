@@ -5,4 +5,9 @@
 <!-- 写sql语句 -->
 <mapper namespace="com.dataLabeling.dao.SimilarDao">
 
+    <select id="selectNotDealedAndSearchedList" resultType="RecordInfo">
+        select recordinfo.* from recordinfo
+        where recordClassId=-1 and appId=#{arg0} and chatRecord like #{arg2}
+        order by rand() limit #{arg1}
+    </select>
 </mapper>

@@ -1,7 +1,7 @@
 package com.dataLabeling.entity;
 
 /**
- * 该类为访客记录文本类别
+ * recordclass实体类
  */
 public class RecordClass {
     private Integer id;

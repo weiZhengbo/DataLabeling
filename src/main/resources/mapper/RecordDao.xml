@@ -5,11 +5,11 @@
 <!-- 写sql语句 -->
 <mapper namespace="com.dataLabeling.dao.RecordDao">
     <select id="selectCountClicked" resultType="Integer">
-        select count(*) from recordinfo where recordClassId=#{arg0} and appFlag=#{arg1}
+        select count(*) from recordinfo where recordClassId=#{arg0} and appId=#{arg1}
     </select>
 
     <select id="selectCountDealed" parameterType="Integer" resultType="Integer">
-        select count(*) from recordinfo where recordClassId!=-1 and appFlag=#{appId}
+        select count(*) from recordinfo where recordClassId!=-1 and appId=#{appId}
     </select>
 
     <select id="selectRecordClassById" parameterType="Integer" resultType="RecordClass">
@@ -20,7 +20,7 @@
         select recordinfo.*,recordclass.recordClass
         from recordinfo  join recordclass
         on recordinfo.recordClassId=recordclass.id
-        where recordinfo.appFlag=#{arg0}
+        where recordinfo.appId=#{arg0}
         order by id limit #{arg1},#{arg2}
     </select>
 
@@ -28,22 +28,22 @@
         select recordinfo.*,recordclass.recordClass
         from recordinfo  join recordclass
         on recordinfo.recordClassId=recordclass.id
-        where recordclass.id=#{arg0} and recordinfo.appFlag=#{arg1}
+        where recordclass.id=#{arg0} and recordinfo.appId=#{arg1}
         order by id limit #{arg2},#{arg3}
     </select>
 
     <select id="selectNotDealedList" resultType="RecordInfo">
         select recordinfo.* from recordinfo
-         where recordClassId=-1 and appFlag=#{arg0}
+         where recordClassId=-1 and appId=#{arg0}
          order by rand() limit #{arg1}
     </select>
 
     <select id="findAllClasses" parameterType="Integer" resultType="RecordClass">
-        select * from recordclass where appFlag=#{appId} order by id
+        select * from recordclass where appId=#{appId} order by id
     </select>
 
     <select id="findMatchClasses" resultType="RecordClass">
-        select * from recordclass where appFlag=#{arg0} and recordClass like #{arg1} order by id
+        select * from recordclass where appId=#{arg0} and recordClass like #{arg1} order by id
     </select>
 
     <select id="findRecordById" resultType="RecordInfo" parameterType="Integer">
@@ -70,11 +70,11 @@
         <selectKey keyProperty="id" resultType="Integer" order="AFTER">
             SELECT last_insert_id()
         </selectKey>
-        insert into recordclass(recordClass,appFlag) values(#{recordClass},#{appId})
+        insert into recordclass(recordClass,appId) values(#{recordClass},#{appId})
     </insert>
 
     <insert id="addRecordBatch" parameterType="RecordInfo">
-          insert IGNORE into recordinfo(originId,fileName,chatRecord,recordTime,recordMd5,appFlag) values
+          insert IGNORE into recordinfo(originId,fileName,chatRecord,recordTime,recordMd5,appId) values
         <foreach collection="list" item="item" index="index" separator="," >
             (#{item.originId},#{item.fileName},#{item.chatRecord},#{item.recordTime},#{item.recordMd5},#{item.appId})
         </foreach>
@@ -91,13 +91,17 @@
         select recordinfo.id,recordinfo.originId,recordinfo.fileName,recordinfo.chatRecord,recordinfo.recordTime,recordclass.recordClass
         from recordinfo left join recordclass
         on recordinfo.recordClassId = recordclass.id
-        where recordinfo.appFlag = #{appId}  order by recordinfo.id
+        where recordinfo.appId = #{appId}  order by recordinfo.id
     </select>
 
     <select id="selectAllDealedData" resultType="java.util.HashMap">
         select recordinfo.id,recordinfo.originId,recordinfo.fileName,recordinfo.chatRecord,recordinfo.recordTime,recordclass.recordClass
         from recordinfo join recordclass
         on recordinfo.recordClassId = recordclass.id
-        where recordinfo.appFlag = #{appId}  order by recordinfo.id
+        where recordinfo.appId = #{appId}  order by recordinfo.id
+    </select>
+
+    <select id="selectRecordsBySid" resultType="RecordInfo" parameterType="Integer">
+        SELECT * FROM recordinfo where recordClassId = #{sid}
     </select>
 </mapper>

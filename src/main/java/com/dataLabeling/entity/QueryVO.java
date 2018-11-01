@@ -1,5 +1,8 @@
 package com.dataLabeling.entity;
 
+/**
+ * 请求条件实体类
+ */
 public class QueryVO {
     private String pc;//表格当前页码 page code
     private String noHandledWord;//相似性 搜索的未处理的关键字

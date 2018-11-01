@@ -25,6 +25,12 @@ public class UploadHandleController {
 
     @Autowired
     private RecordService recordService;
+
+    /**
+     * 上传文件
+     * @param appId
+     * @return
+     */
     @RequestMapping("/uploadFile")
     @ResponseBody
     public Boolean uploadFile(Integer appId){

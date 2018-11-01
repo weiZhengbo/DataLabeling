@@ -11,8 +11,8 @@
     <title>welcome</title>
 </head>
 <body>
-<div style="margin-top: 40%">
-    <h1 style="text-align: center; margin-bottom: 50%">欢迎使用数据标注系统</h1>
+<div style="margin-top: 15%">
+    <h1 style="text-align: center; margin-bottom: 75%">欢迎使用数据标注系统</h1>
 </div>
 </body>
 </html>
