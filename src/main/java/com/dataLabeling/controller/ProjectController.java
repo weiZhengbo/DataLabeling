@@ -13,6 +13,11 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    /**
+     * 添加新的project
+     * @param project
+     * @return
+     */
     @RequestMapping("/addnewProject")
     @ResponseBody
     public Integer addnewProject(Project project){

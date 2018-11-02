@@ -76,6 +76,11 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    public List<RecordInfo> findRecordsById(Integer sid) {
+        return recordDao.selectRecordsBySid(sid);
+    }
+
+    @Override
     public Boolean addClassTag( Integer rid, Integer sid) {
         recordDao.addClassTag(rid, sid);
         return true;

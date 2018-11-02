@@ -3,7 +3,7 @@ package com.dataLabeling.entity;
 import java.util.List;
 
 /**
- * 分页bean
+ * 分页实体类
  */
 public class PageBean<T> {
     private int pc;//上面表格当前页码 page code

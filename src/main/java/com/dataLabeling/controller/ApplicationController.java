@@ -17,6 +17,12 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
 
+    /**
+     * 加载所有的application
+     * @param pid
+     * @param model
+     * @return
+     */
     @RequestMapping("/loadApplications")
     public String loadApplications(Integer pid, Model model){
         List<Application> applications = applicationService.loadApplications(pid);
@@ -24,6 +30,12 @@ public class ApplicationController {
         return "main";
     }
 
+    /**
+     * 新增application
+     * @param application
+     * @param model
+     * @return
+     */
     @RequestMapping("/addNewApplication")
     @ResponseBody
     public Application addNewApplication(Application application,Model model){

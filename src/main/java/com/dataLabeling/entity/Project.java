@@ -1,5 +1,8 @@
 package com.dataLabeling.entity;
 
+/**
+ * 项目实体类
+ */
 public class Project {
     private Integer id;//项目编号
     private String projectName;//项目名

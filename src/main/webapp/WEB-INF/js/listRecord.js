@@ -124,8 +124,13 @@ function getUrl(change,value) {
 
     var reqUrl = head;
     if (change=='pc'){
-        reqUrl=reqUrl+'?pc='+value;
-        reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=yes';
+        if(dataType=='dealed'){
+            reqUrl=reqUrl+'?pc='+value;
+            reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=yes';
+        }else {
+            reqUrl=reqUrl+'?pc='+value;
+            reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=no';
+        }
     }else if(change=='clickwordId'){
         reqUrl=reqUrl+'?clickwordId='+value;
         reqUrl=reqUrl+'&pc=1&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=no';

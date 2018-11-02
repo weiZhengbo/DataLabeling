@@ -100,4 +100,8 @@
         on recordinfo.recordClassId = recordclass.id
         where recordinfo.appId = #{appId}  order by recordinfo.id
     </select>
+
+    <select id="selectRecordsBySid" resultType="RecordInfo" parameterType="Integer">
+        SELECT * FROM recordinfo where recordClassId = #{sid}
+    </select>
 </mapper>

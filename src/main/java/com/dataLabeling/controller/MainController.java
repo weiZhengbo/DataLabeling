@@ -19,6 +19,11 @@ public class MainController {
     @Autowired
     private ProjectService projectService;
 
+    /**
+     * 首页，展示所有项目
+     * @param model
+     * @return
+     */
     @RequestMapping("/index")
     public String init(Model model){
         List<Project> projects = projectService.loadAllProject();

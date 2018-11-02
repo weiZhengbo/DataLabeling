@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class ExcelReader {
 
-
+    //读excel处理文件
     // 去读Excel的方法readExcel，该方法的入口参数为一个File对象
     public void readExcel(File file,Integer appId,RecordService recordService) {
         try {
