@@ -81,7 +81,11 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Boolean addClassTag( Integer rid, Integer sid) {
+    public Boolean addClassTag(Integer rid, Integer sid, Integer appId) {
+        int num = recordDao.judgeSidIsInappId(sid,appId);
+        if (num==0){
+            return false;
+        }
         recordDao.addClassTag(rid, sid);
         return true;
     }
@@ -135,5 +139,11 @@ public class RecordServiceImpl implements RecordService {
             mapList=recordDao.selectAllData(appId);
         }
         return mapList;
+    }
+
+    @Override
+    public String selectRecordClassById(Integer sid) {
+        RecordClass recordClass = recordDao.selectRecordClassById(sid);
+        return recordClass.getRecordClass();
     }
 }

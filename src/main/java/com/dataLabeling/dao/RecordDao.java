@@ -142,4 +142,12 @@ public interface RecordDao {
      * @return
      */
     List<RecordInfo> selectRecordsBySid(Integer sid);
+
+    /**
+     * 判断sid是否是appId下面的
+     * @param sid
+     * @param appId
+     * @return
+     */
+    int judgeSidIsInappId(Integer sid, Integer appId);
 }

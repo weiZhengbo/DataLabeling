@@ -25,7 +25,7 @@ public interface RecordService {
     List<RecordInfo> findRecordsById(Integer sid);
 
     //为record添加recordclass
-    Boolean addClassTag(Integer rid, Integer sid);
+    Boolean addClassTag(Integer rid, Integer sid, Integer appId);
 
     //移除record的class
     Boolean removeRecordClass(Integer rid);
@@ -42,4 +42,5 @@ public interface RecordService {
     //查询record数据
     List<Map<String,Object>> queryInfoDatas(Integer appId, String downType, String choosedIds);
 
+    String selectRecordClassById(Integer sid);
 }

@@ -108,8 +108,8 @@ public class RecordController {
      */
     @RequestMapping("/addRecordClass")
     @ResponseBody
-    public Boolean addRecordClass(Integer rid,Integer sid){
-        Boolean b = recordService.addClassTag(rid, sid);
+    public Boolean addRecordClass(Integer rid,Integer sid,Integer appId){
+        Boolean b = recordService.addClassTag(rid, sid,appId);
         return b;
     }
 
@@ -144,6 +144,13 @@ public class RecordController {
     @ResponseBody
     public RecordClass addnewRecordClass(RecordClass recordClass){
         recordService.addnewRecordClass(recordClass);
+        return recordClass;
+    }
+
+    @RequestMapping("/selectRecordClassById")
+    @ResponseBody
+    public String selectRecordClassById(Integer sid){
+        String recordClass = recordService.selectRecordClassById(sid);
         return recordClass;
     }
 
