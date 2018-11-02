@@ -5,8 +5,10 @@
 
 	<insert id="saveFileContent" useGeneratedKeys="true">
 
-        insert into recordinfo(chatRecord, fileName, recordMd5, recordTime, appId) values (
+        insert into recordinfo(chatRecord, resultRecord, resultCode,fileName, recordMd5, recordTime, appId) values (
           #{chatRecord,jdbcType=VARCHAR},
+           #{resultRecord,jdbcType=VARCHAR},
+          #{resultCode,jdbcType=VARCHAR},
            #{fileName,jdbcType=VARCHAR},
            #{recordMd5,jdbcType=VARCHAR},
           sysdate(),
@@ -21,6 +23,12 @@
 
     <!--查询未标记文本-->
     <select id="getNoTagList" resultType="com.dataLabeling.entity.RecordInfo">
-        select * from recordinfo where appId=#{appId} and recordClassId = '-1'
+        select * from recordinfo where appId=#{appId}
     </select>
+
+
+    <!--保存标记记录-->
+    <update id="saveTagInfo" >
+      update  recordinfo set resultRecord=#{resultRecord},resultCode=#{resultCode},recordClassId='0' where id=#{id}
+    </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.dataLabeling.util;
 
+import com.dataLabeling.entity.RecordInfo;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -8,9 +9,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.util.List;
 
 public class FileReadUtil {
 
+    /**
+     * 读取txt
+     * @param file
+     * @return
+     */
     public static String readTxt(File file){
 
         StringBuilder result = new StringBuilder();
@@ -27,6 +34,12 @@ public class FileReadUtil {
         return result.toString().trim();
     }
 
+    /**
+     * 读取excel
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static String readExcel(File file) throws IOException {
         String fileName = file.getName();
         StringBuilder result = new StringBuilder();
@@ -51,12 +64,17 @@ public class FileReadUtil {
              //   for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {   //遍历列
                     Cell cell = row.getCell(firstCellIndex);
                     if (cell != null) {
+                        result.append(cell.toString());
                         System.out.print(cell.toString() + "    ");
                     }
                 //}
-                System.out.println("");
             }
         }
         return result.toString();
+    }
+
+    public static String exportTxt(List<RecordInfo> list){
+
+        return "";
     }
 }

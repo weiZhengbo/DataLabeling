@@ -15,4 +15,6 @@ public interface EntityTagMapper {
     public List<RecordInfo> getNoTagList(Integer appId);
 
 	public int getCountByMd5(@Param("md5") String md5,@Param("appId") Integer appId);
+
+    void saveTagInfo(RecordInfo recordInfo);
 }

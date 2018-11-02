@@ -7,11 +7,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/entityTag.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/listRecord.js"></script>
 <title>Insert title here</title>
 </head>
+<input type="hidden" value="" id="classId"/>
+<input type="hidden" value="${appId}" id="appId"/>
+<input type="hidden" value="" id="classCode"/>
 <body>
-<div>
+<%--<div>
     <form style="float:left">
         <c:choose>
             <c:when test="${pb.dataType eq 'notdeal' }">
@@ -29,7 +31,7 @@
         </c:choose>
     </form>
     <div style='clear:both'></div>
-</div>
+</div>--%>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -48,7 +50,7 @@
                         <span id="CCid" style="display: none"></span>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:200px;overflow:scroll;margin-left: 25%">
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="height:200px;overflow:scroll;margin-left: 25%" >
                         <c:forEach items="${pb.TClasses }" var="tClasses">
                             <li onclick="changeChoosed(this)" id="li${tClasses.id}" aria-checked="true"><a>${tClasses.recordClass}</a></li>
                         </c:forEach>
@@ -66,58 +68,44 @@
 <div class="col-md-9 col-lg-9 col-sm-9 col-xs-9">
     <table class="table table-striped maintable" style="margin-bottom: 0">
     <tr><th>序号</th><th>文本</th><th>标记</th><th></th></tr>
-<c:forEach var="info" items="${recordInfoList }" varStatus="status">
+<c:forEach var="info" items="${pageResource.list }" varStatus="status">
     <tr>
     <td>${ status.index + 1}</td>
-    <td>${info.chatRecord }</td>
-    <td><a>标记</a></td>
+        <td > <div  id="record${status.index + 1}">${info.resultRecord }</div></td>
+        <td ><input onclick="getSelect('record${ status.index + 1}',${info.id})" type="button" value="标记"/></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td ><div id="record${status.index + 1}Code">${info.resultCode}</div></td>
+        <td></td>
     </tr>
 </c:forEach>
 </table>
 </div>
 <div class="right-table  col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-    <c:choose>
-        <c:when test="${pb.dataType eq 'notdeal' }">
             <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden;">
-                <table class="table table-hover similarTag ">
-                    <tr><th>#</th><th>类别标签</th><th></th></tr>
-                    <c:forEach items="${pb.TClasses }" var="tClasses">
-                        <tr draggable="true" ondragstart="drag(event)" id="sid${tClasses.id}">
-                            <td onclick="getUrl('clickwordId',${tClasses.id})">${tClasses.id}</td>
-                            <td onclick="getUrl('clickwordId',${tClasses.id})">${tClasses.recordClass}</td>
-                            <td onclick="similarTagDelete(${tClasses.id},'${tClasses.recordClass}')">
-                                <i class='glyphicon glyphicon-remove' ></i>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden;">
-                <table class="table table-hover similarTag colorFulTag">
-                    <tr><th>#</th><th>类别标签</th><th></th></tr>
+                <table class="table table-hover similarTag " id="classTable">
+                    <tr><th>#</th><th>实体前缀</th><th></th></tr>
                     <c:forEach items="${classList }" var="tClasses">
                         <tr draggable="true" ondragstart="drag(event)" id="sid${tClasses.id}">
-                            <td onclick="changeStatus('clickwordId',${tClasses.id})">${tClasses.id}</td>
-                            <td onclick="changeStatus('clickwordId',${tClasses.id})">${tClasses.recordClass}</td>
-                            <td onclick="similarTagDelete(${tClasses.id},'${tClasses.recordClass}')">
+                            <td onclick="chooseTag(${tClasses.id},'${tClasses.recordClass}',this)">${tClasses.id}</td>
+                            <td onclick="chooseTag(${tClasses.id},'${tClasses.recordClass}',this)">${tClasses.recordClass}</td>
+                            <td onclick="deleteTag(${tClasses.id},'${tClasses.recordClass}',this)">
                                 <i class='glyphicon glyphicon-remove' ></i>
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
             </div>
-        </c:otherwise>
-    </c:choose>
     <button class="btn btn-primary" onclick="addClass()" style="margin-top: 20px;">增加类别标签</button>
     <div>
         <form name="form" action="fileUpload.action" method="post"  enctype="multipart/form-data" id="fileUpload">
-            <input type="hidden" value="-1" name="appId">
+            <input type="hidden" value="${appId}" name="appId">
             <input type="file" name="file">
             <input type="button" class="btn btn-primary uploadFile" onclick="uploadFile()" value="上传"/>
         </form>
     </div>
+    <input type="button" class="btn btn-primary" onclick="exportResult()" value="导出结果文本"/>
 </div>
 </body>
 </html>
