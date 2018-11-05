@@ -1,6 +1,7 @@
 package com.dataLabeling.dao;
 
 import com.dataLabeling.entity.RecordInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface SimilarDao {
      * @param noHandledWord
      * @return
      */
-    List<RecordInfo> selectNotDealedAndSearchedList(Integer appId, int ps, String noHandledWord);
+    List<RecordInfo> selectNotDealedAndSearchedList(@Param("appId") Integer appId, @Param("ps") int ps, @Param("noHandledWord") String noHandledWord);
 }

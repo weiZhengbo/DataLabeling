@@ -7,7 +7,7 @@
 
     <select id="selectNotDealedAndSearchedList" resultType="RecordInfo">
         select recordinfo.* from recordinfo
-        where recordClassId=-1 and appId=#{arg0} and chatRecord like #{arg2}
-        order by rand() limit #{arg1}
+        where recordClassId=-1 and appId=#{appId} and chatRecord like #{noHandledWord}
+        order by rand() limit #{ps}
     </select>
 </mapper>
