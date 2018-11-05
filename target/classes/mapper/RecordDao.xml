@@ -104,4 +104,8 @@
     <select id="selectRecordsBySid" resultType="RecordInfo" parameterType="Integer">
         SELECT * FROM recordinfo where recordClassId = #{sid}
     </select>
+
+    <select id="judgeSidIsInappId" resultType="Integer">
+        SELECT COUNT(*) FROM recordclass where id = #{arg0} and appId = #{arg1}
+    </select>
 </mapper>

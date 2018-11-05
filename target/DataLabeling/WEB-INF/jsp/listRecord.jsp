@@ -73,17 +73,16 @@
 					<tr>
 						<td>${recordInfo.id }</td>
 						<td>${recordInfo.chatRecord }</td>
-						<td class="sclass" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">${recordInfo.recordClass }</td>
-						<td>
 							<c:choose>
 								<c:when test="${recordInfo.recordClass eq null}">
-									<i class='glyphicon glyphicon-plus' id='rr${recordInfo.id}' data-toggle='modal' data-target='#myModal'></i>
+									<td class="sclass" ondrop="drop_handler(event);" ondragover="dragover_handler(event);"><input type="number" placeholder="请输入编号"/></td>
+									<td><i class='glyphicon glyphicon-plus' id='rr${recordInfo.id}' data-toggle='modal' data-target='#myModal'></i></td>
 								</c:when>
 								<c:otherwise>
-									<i class='glyphicon glyphicon-remove' onclick="javascript:similarTagRemove(${recordInfo.id },this)"></i>
+									<td class="sclass" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">${recordInfo.recordClass }</td>
+									<td><i class='glyphicon glyphicon-remove' onclick="javascript:similarTagRemove(${recordInfo.id },this)"></i></td>
 								</c:otherwise>
 							</c:choose>
-						</td>
 					</tr>
 				</c:forEach>
 			</c:when>
@@ -92,18 +91,16 @@
 					<tr>
 						<td>${recordInfo.id }</td>
 						<td>${recordInfo.chatRecord }</td>
-						<td class="sclass" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">${recordInfo.recordClass }</td>
-						<td>
-							<c:choose>
-								<c:when test="${recordInfo.recordClass eq null}">
-									<i class='glyphicon glyphicon-plus' id='rr${recordInfo.id}'
-									   data-toggle='modal' data-target='#myModal'></i>
-								</c:when>
-								<c:otherwise>
-									<i class='glyphicon glyphicon-remove' onclick="javascript:similarTagRemove(${recordInfo.id },this)"></i>
-								</c:otherwise>
-							</c:choose>
-						</td>
+						<c:choose>
+							<c:when test="${recordInfo.recordClass eq null}">
+								<td class="sclass" ondrop="drop_handler(event);" ondragover="dragover_handler(event);"><input type="number" placeholder="请输入编号"/></td>
+								<td><i class='glyphicon glyphicon-plus' id='rr${recordInfo.id}' data-toggle='modal' data-target='#myModal'></i></td>
+							</c:when>
+							<c:otherwise>
+								<td class="sclass" ondrop="drop_handler(event);" ondragover="dragover_handler(event);">${recordInfo.recordClass }</td>
+								<td><i class='glyphicon glyphicon-remove' onclick="javascript:similarTagRemove(${recordInfo.id },this)"></i></td>
+							</c:otherwise>
+						</c:choose>
 					</tr>
 				</c:forEach>
 			</c:otherwise>

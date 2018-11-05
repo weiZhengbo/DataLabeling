@@ -66,13 +66,14 @@
 </div>
 
 <div class="col-md-9 col-lg-9 col-sm-9 col-xs-9">
-    <table class="table table-striped maintable" style="margin-bottom: 0">
+    <table id="recordTable" class="table table-striped maintable" style="margin-bottom: 0">
     <tr><th>序号</th><th>文本</th><th>标记</th><th></th></tr>
 <c:forEach var="info" items="${pageResource.list }" varStatus="status">
     <tr>
     <td>${ status.index + 1}</td>
         <td > <div  id="record${status.index + 1}">${info.resultRecord }</div></td>
-        <td ><input onclick="getSelect('record${ status.index + 1}',${info.id})" type="button" value="标记"/></td>
+        <td width="20%"><input class="btn btn-primary" onclick="getSelect('record${ status.index + 1}',${info.id})" type="button" value="标记"/>
+            <input class="btn btn-primary" onclick="cancelSelect('record${ status.index + 1}',${info.id})" type="button" value="取消"/></td>
     </tr>
     <tr>
         <td></td>
@@ -81,7 +82,10 @@
     </tr>
 </c:forEach>
 </table>
+    <!--分页显示-->
+    <div id="Pagination"></div>
 </div>
+
 <div class="right-table  col-lg-3 col-md-3 col-sm-3 col-xs-3" >
             <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden;">
                 <table class="table table-hover similarTag " id="classTable">
@@ -108,4 +112,6 @@
     <input type="button" class="btn btn-primary" onclick="exportResult()" value="导出结果文本"/>
 </div>
 </body>
+
+
 </html>
