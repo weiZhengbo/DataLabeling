@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 写sql语句 -->
+<mapper namespace="com.dataLabeling.dao.ApplicationDao">
+    <select id="loadApplications" parameterType="Integer" resultType="Application">
+        select * from app where projectId=#{pid}
+    </select>
+    <insert id="addNewApplication" parameterType="Application" >
+        <selectKey keyProperty="id" resultType="Integer" order="AFTER">
+            SELECT last_insert_id()
+        </selectKey>
+        insert into app(appName,projectId,appType) values(#{appName},#{projectId},#{appType})
+    </insert>
+</mapper>

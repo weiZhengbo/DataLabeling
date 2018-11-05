@@ -16,6 +16,41 @@ $(document).ready(function () {
         $('#clickId').text(clickedId);
     });
 
+    $('.maintable').keydown(function(event){
+        var keynum = (event.keyCode ? event.keyCode : event.which);
+        if(keynum == '13'){
+            var $tb = $(event.currentTarget);
+            var $input = $(event.target);
+            var url  = decodeURI(window.location.search.substr(1));
+            var appId = getQueryString(url,'appId');
+            var sid = $input.val();
+            var rid = $input.parents('tr').children().first().text();
+
+            var url1  = document.URL;
+            var urlHead = url1.substring(0,url1.lastIndexOf('/'));
+            var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+sid+"&appId="+appId;
+            $.get(reqUrl,function (data,status) {
+                if(data){
+                    var $td = $input.parents('td');
+                    reqUrl = urlHead+"/selectRecordClassById?sid="+sid;
+                    $.get(reqUrl,function (data1) {
+                        $td.html(data1);
+                    });
+                    $td.next().html("<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>");
+                    var $tdList = $tb.find('input');
+                    var numInput = $tdList.length;
+                    var tdId = $tdList.index($input);
+                    if(tdId<numInput-1){
+                        $nxtTd = $tdList.get(tdId+1);
+                        $nxtTd.focus();
+                    }
+                }else {
+                    alert("输入编号有误");
+                }
+            });
+        }
+    });
+
     $('.uploadFile').click(function () {
         var url  = decodeURI(window.location.search.substr(1));
         var appId = getQueryString(url,'appId');
@@ -93,17 +128,29 @@ function drag(event) {
 }
 function drop_handler(event) {
     event.preventDefault();
+    var tagName = event.target.tagName;
+    var $td = null;
+    if(tagName=='TD'){
+        $td = $(event.target);
+    }else {
+        var $input = $(event.target);
+        $td = $input.parents('td');
+    }
     var tr = event.dataTransfer.getData("Text");
     var similarId = $('#'+tr).children().eq(0).text();
     var data = $('#'+tr).children().eq(1).text();
-    event.target.textContent=data;
-    var rid =event.target.parentNode.firstChild.nextElementSibling.textContent;
+    var rid = $td.parents('tr').children().first().text();
+    $td.html(data);
+    var url  = decodeURI(window.location.search.substr(1));
+    var appId = getQueryString(url,'appId');
     var url1  = document.URL;
     var urlHead = url1.substring(0,url1.lastIndexOf('/'));
-    var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+similarId;
+    var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+similarId+"&appId="+appId;
     $.get(reqUrl,function (data,status) {
-        if(data!=null && data!=""){
-            event.target.parentNode.lastChild.previousElementSibling.innerHTML="<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>";
+        if(data){
+            $td.next().html("<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>");
+        }else {
+            alert("输入编号有误");
         }
     });
 }
@@ -163,30 +210,35 @@ function changeChoosed(that) {
 function confimClick() {
     var CCid = $('#CCid').text();
     var CCText = $('#CCText').text();
+    var url  = decodeURI(window.location.search.substr(1));
+    var appId = getQueryString(url,'appId');
     var url1  = document.URL;
     var urlHead = url1.substring(0,url1.lastIndexOf('/'));
     if (CCid==null||CCid==''){
         alert('请选择类别标签');
     }else {
         var rid = $('#clickId').text();
-        var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+CCid;
+        var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+CCid+"&appId="+appId;
         $.get(reqUrl,function (data,status) {
-            if(data!=null && data!=""){
+            if(data){
                 $('#myModal').modal('hide');
                 $('#rr'+rid).parents('td').siblings('.sclass').text(CCText);
                 $('#rr'+rid).parents('td')[0].innerHTML="<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>";
+            }else {
+                alert("输入编号有误");
             }
         });
     }
 }
 function similarTagRemove(rid,that) {
     var $i = $(that);
+    console.log($i);
     var url1  = document.URL;
     var urlHead = url1.substring(0,url1.lastIndexOf('/'));
     var reqUrl = urlHead+"/removeRecordClass?rid="+rid;
     $.get(reqUrl,function (data,status) {
         if(data){
-            $i.parents('td').siblings('.sclass').text("");
+            $i.parents('td').siblings('.sclass').html("<input type=\"number\" placeholder=\"请输入编号\"/>");
             $i.parents('td')[0].innerHTML="<i class='glyphicon glyphicon-plus' id='rr"+rid+"' data-toggle='modal' data-target='#myModal'></i>";
         }
     });
