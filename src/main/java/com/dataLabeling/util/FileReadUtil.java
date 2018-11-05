@@ -8,6 +8,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
@@ -73,8 +75,31 @@ public class FileReadUtil {
         return result.toString();
     }
 
-    public static String exportTxt(List<RecordInfo> list){
+    public static File exportTxt(List<RecordInfo> list, HttpServletRequest request) throws IOException {
 
-        return "";
+        String filenameTemp = "D:\\实体标注结果.txt";
+        File filename = new File(filenameTemp);
+        if (!filename.exists()) {
+            //如果文件不存在则创建
+            filename.createNewFile();
+        }
+        // 文件路径
+        File file = new File(filenameTemp);
+
+        BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        for(RecordInfo recordInfo:list){
+            for(int i = 0 ;i < recordInfo.getChatRecord().length();i++){
+                String[] str = recordInfo.getResultCode().split(" ");
+                System.out.println(recordInfo.getChatRecord().charAt(i));
+                out.write(recordInfo.getChatRecord().charAt(i)+"\t");
+                out.write(str[i]+"\r\n"); // \r\n即为换行
+            }
+            out.write("\r\n");
+        }
+
+        out.flush(); // 把缓存区内容压入文件
+        out.close(); // 最后记得关闭文件
+
+        return file;
     }
 }

@@ -8,7 +8,12 @@ import com.dataLabeling.util.FileReadUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by wzb on 2018/10/29.
@@ -67,12 +75,20 @@ public class EntityTagController {
     @RequestMapping("/noTaglist")
     public String noTaglist(@RequestParam("appId") Integer appId, ModelMap map,Integer pageNo,Integer pageSize){
         pageNo = pageNo == null?1:pageNo;
-        pageSize = pageSize == null?5:pageSize;
+        pageSize = pageSize == null?10:pageSize;
         PageHelper.startPage(pageNo, pageSize);
         map.addAttribute("pageResource",new PageInfo<RecordInfo>(entityTagService.getNoTagList(appId)));
         map.addAttribute("classList",recordService.findAllClasses(appId));
         map.addAttribute("appId",appId);
         return "entityTagList";
+    }
+    @RequestMapping("/getAllList")
+    @ResponseBody
+    public PageInfo<RecordInfo> getAllList(@RequestParam("appId") Integer appId, Integer pageNo, Integer pageSize){
+        pageNo = pageNo == null?1:pageNo;
+        pageSize = pageSize == null?10:pageSize;
+        PageHelper.startPage(pageNo, pageSize);
+        return new PageInfo<RecordInfo>(entityTagService.getNoTagList(appId));
     }
 
     @RequestMapping("/addnewRecordClass")
@@ -101,10 +117,17 @@ public class EntityTagController {
     }
 
 
-    @RequestMapping("/exportResult.")
-    public String exportResult(Integer appId){
+    @RequestMapping("/exportResult")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportResult(Integer appId, HttpServletRequest request) throws IOException {
         List<RecordInfo> list = entityTagService.getNoTagList(appId);
-        FileReadUtil.exportTxt(list);
-        return "导出成功";
+        //通过查询结果生成txt文件
+        File file = FileReadUtil.exportTxt(list,request);
+        HttpHeaders headers = new HttpHeaders();
+        String fileName = URLEncoder.encode(file.getName(), "UTF-8");
+        headers.setContentDispositionFormData("attachment", fileName);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                headers, HttpStatus.CREATED);
     }
 }
