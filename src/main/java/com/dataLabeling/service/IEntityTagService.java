@@ -14,7 +14,7 @@ public interface IEntityTagService {
 
 	public void saveFileContent(String[] list, RecordInfo recordInfo);
 
-    public List<RecordInfo> getNoTagList(Integer appId);
+    public List<RecordInfo> getNoTagList(Integer appId, Integer dataType);
 
     void saveTagInfo(RecordInfo recordInfo);
 }

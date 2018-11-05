@@ -20,6 +20,8 @@ public class RecordInfo {
     private String resultCode;
     //访客记录文本类别
     private String recordClass;
+    //方可记录文本id
+    private Integer recordClassId;
     //原始时间戳
     private Date recordTime;
 
@@ -105,5 +107,13 @@ public class RecordInfo {
 
     public void setResultCode(String resultCode) {
         this.resultCode = resultCode;
+    }
+
+    public Integer getRecordClassId() {
+        return recordClassId;
+    }
+
+    public void setRecordClassId(Integer recordClassId) {
+        this.recordClassId = recordClassId;
     }
 }

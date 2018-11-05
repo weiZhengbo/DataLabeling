@@ -48,8 +48,8 @@ public class EntityTagService implements IEntityTagService {
 	}
 
 	@Override
-	public List<RecordInfo> getNoTagList(Integer appId) {
-		return entityTagMapper.getNoTagList(appId);
+	public List<RecordInfo> getNoTagList(Integer appId, Integer dataType) {
+		return entityTagMapper.getNoTagList(appId,dataType);
 	}
 
 	/**

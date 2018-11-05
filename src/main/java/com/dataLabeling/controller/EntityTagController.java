@@ -1,5 +1,6 @@
 package com.dataLabeling.controller;
 
+import com.dataLabeling.entity.PageBean;
 import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
@@ -72,24 +73,24 @@ public class EntityTagController {
         return "上传成功";
     }
 
-    @RequestMapping("/noTaglist")
-    public String noTaglist(@RequestParam("appId") Integer appId, ModelMap map,Integer pageNo,Integer pageSize){
-        pageNo = pageNo == null?1:pageNo;
-        pageSize = pageSize == null?10:pageSize;
-        PageHelper.startPage(pageNo, pageSize);
-        map.addAttribute("pageResource",new PageInfo<RecordInfo>(entityTagService.getNoTagList(appId)));
+    @RequestMapping("/getTaglist")
+    public String noTaglist(@RequestParam("appId")Integer appId, @RequestParam("dataType")Integer dataType, ModelMap map,Integer pc){
+        pc = pc == null?1:pc;
+        dataType = dataType == null?-1:dataType;
+        PageHelper.startPage(pc, 10);
+        PageBean<RecordClass> pb = new PageBean<>();
+        pb.setPc(pc);
+        PageInfo<RecordInfo> pageInfo = new PageInfo<RecordInfo>(entityTagService.getNoTagList(appId,dataType));
+        pb.setTr((int)pageInfo.getTotal());
+        pb.setPs(10);
+        map.addAttribute("pageResource",pageInfo);
         map.addAttribute("classList",recordService.findAllClasses(appId));
         map.addAttribute("appId",appId);
+        map.addAttribute("dataType",dataType);
+        map.addAttribute("pb",pb);
         return "entityTagList";
     }
-    @RequestMapping("/getAllList")
-    @ResponseBody
-    public PageInfo<RecordInfo> getAllList(@RequestParam("appId") Integer appId, Integer pageNo, Integer pageSize){
-        pageNo = pageNo == null?1:pageNo;
-        pageSize = pageSize == null?10:pageSize;
-        PageHelper.startPage(pageNo, pageSize);
-        return new PageInfo<RecordInfo>(entityTagService.getNoTagList(appId));
-    }
+
 
     @RequestMapping("/addnewRecordClass")
     @ResponseBody
@@ -119,8 +120,8 @@ public class EntityTagController {
 
     @RequestMapping("/exportResult")
     @ResponseBody
-    public ResponseEntity<byte[]> exportResult(Integer appId, HttpServletRequest request) throws IOException {
-        List<RecordInfo> list = entityTagService.getNoTagList(appId);
+    public ResponseEntity<byte[]> exportResult(Integer appId,HttpServletRequest request) throws IOException {
+        List<RecordInfo> list = entityTagService.getNoTagList(appId, 0);
         //通过查询结果生成txt文件
         File file = FileReadUtil.exportTxt(list,request);
         HttpHeaders headers = new HttpHeaders();

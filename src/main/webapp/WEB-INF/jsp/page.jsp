@@ -19,7 +19,7 @@
             <c:set var="begin" value="${pb.pc-3 }"/>
             <c:set var="end" value="${pb.pc+4 }"/>
             <%-- 第三条：第二条只适合在中间，而两端会出问题。这里处理begin出界！ --%>
-            <%-- 如果begin<1，那么让begin=1，相应end=8 --%>
+            <%-- 如果nbegi<1，那么让begin=1，相应end=8 --%>
             <c:if test="${begin<1 }">
                 <c:set var="begin" value="1"/>
                 <c:set var="end" value="8"/>

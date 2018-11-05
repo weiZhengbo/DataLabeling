@@ -1,37 +1,36 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<jsp:include page="/WEB-INF/jsp/taglib.jsp" flush="true"/>
+<jsp:include page="/WEB-INF/jsp/taglib.jsp" />
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/entityTag.js"></script>
 <title>Insert title here</title>
 </head>
+<body>
 <input type="hidden" value="" id="classId"/>
 <input type="hidden" value="${appId}" id="appId"/>
 <input type="hidden" value="" id="classCode"/>
-<body>
-<%--<div>
+<div>
     <form style="float:left">
         <c:choose>
-            <c:when test="${pb.dataType eq 'notdeal' }">
+            <c:when test="${dataType eq 0 }">
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="data" value="dealed" onclick="getUrl('dataType','dealed')"/>已标注数据
+                <input type="radio" name="data" value="0" checked onclick="changeType(this)"/>已标注数据
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="data" value="notdeal" checked onclick="getUrl('dataType','notdeal')"/>未标注数据
+                <input type="radio" name="data" value="-1"  onclick="changeType(this)"/>未标注数据
             </c:when>
             <c:otherwise>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="data" value="dealed" onclick="getUrl('dataType','dealed')" checked/>已标注数据
+                <input type="radio" name="data" value="0" onclick="changeType(this)" />已标注数据
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="data" value="notdeal"  onclick="getUrl('dataType','notdeal')"/>未标注数据
+                <input type="radio" name="data" value="-1"  checked onclick="changeType(this)"/>未标注数据
             </c:otherwise>
         </c:choose>
     </form>
     <div style='clear:both'></div>
-</div>--%>
+</div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -64,7 +63,6 @@
         </div>
     </div>
 </div>
-
 <div class="col-md-9 col-lg-9 col-sm-9 col-xs-9">
     <table id="recordTable" class="table table-striped maintable" style="margin-bottom: 0">
     <tr><th>序号</th><th>文本</th><th>标记</th><th></th></tr>
@@ -82,10 +80,8 @@
     </tr>
 </c:forEach>
 </table>
-    <!--分页显示-->
-    <div id="Pagination"></div>
+<jsp:include page="page.jsp"></jsp:include>
 </div>
-
 <div class="right-table  col-lg-3 col-md-3 col-sm-3 col-xs-3" >
             <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden;">
                 <table class="table table-hover similarTag " id="classTable">
@@ -109,9 +105,10 @@
             <input type="button" class="btn btn-primary uploadFile" onclick="uploadFile()" value="上传"/>
         </form>
     </div>
-    <input type="button" class="btn btn-primary" onclick="exportResult()" value="导出结果文本"/>
+    <c:if test="${dataType eq 0 }">
+      <input type="button" class="btn btn-primary" onclick="exportResult()" value="导出结果文本"/>
+    </c:if>
 </div>
 </body>
-
 
 </html>
