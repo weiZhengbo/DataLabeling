@@ -32,7 +32,7 @@ function showAppDetail(appId,that) {
     }else if(laststr == '相似标注'){
         var reqUrl = urlHead+"/SimilarController/findAll?appId="+appId;
     }else if(laststr == '实体标注'){
-        var reqUrl = urlHead+"/entityTag/noTaglist?appId="+appId;
+        var reqUrl = urlHead+"/entityTag/getTaglist?appId="+appId+"&&dataType=-1";
     }
     $('#mainframe').attr('src',reqUrl);
     // window.location.href=reqUrl;
@@ -69,7 +69,7 @@ function iFrameHeight(id) {
     var ifm= document.getElementById(id);
     var subWeb = document.frames ? document.frames[id].document :ifm.contentDocument;
     if(ifm != null && subWeb != null) {
-        ifm.height = 1000;
+        ifm.height = subWeb.body.scrollHeight;
         ifm.width = subWeb.body.scrollWidth;
     }
 }

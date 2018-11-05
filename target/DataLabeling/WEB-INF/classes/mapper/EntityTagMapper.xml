@@ -23,12 +23,12 @@
 
     <!--查询未标记文本-->
     <select id="getNoTagList" resultType="com.dataLabeling.entity.RecordInfo">
-        select * from recordinfo where appId=#{appId}
+        select * from recordinfo where appId=#{appId} and recordClassId=#{dataType}
     </select>
 
 
     <!--保存标记记录-->
     <update id="saveTagInfo" >
-      update  recordinfo set resultRecord=#{resultRecord},resultCode=#{resultCode},recordClassId='0' where id=#{id}
+      update  recordinfo set resultRecord=#{resultRecord},resultCode=#{resultCode},recordClassId=#{recordClassId} where id=#{id}
     </update>
 </mapper>

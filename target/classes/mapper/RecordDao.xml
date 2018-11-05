@@ -5,7 +5,7 @@
 <!-- 写sql语句 -->
 <mapper namespace="com.dataLabeling.dao.RecordDao">
     <select id="selectCountClicked" resultType="Integer">
-        select count(*) from recordinfo where recordClassId=#{arg0} and appId=#{arg1}
+        select count(*) from recordinfo where recordClassId=#{0} and appId=#{1}
     </select>
 
     <select id="selectCountDealed" parameterType="Integer" resultType="Integer">
