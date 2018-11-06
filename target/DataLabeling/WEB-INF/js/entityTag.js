@@ -107,6 +107,7 @@ function getSelect(id,infoId) {
     }
     start += offset;
     end += offset;
+    debugger;
     if (text.substring(start, end) != selecter.toString()) {
         return;
     }
@@ -119,6 +120,7 @@ function getSelect(id,infoId) {
     var result = "";
     var classCode = $("#classCode").val();
     var resultCode = $("#" + id + "Code").text().split(" ");
+    debugger;
     for (var i = 0; i < resultCode.length; i++) {
         if (i < start || i > end - 1) {
             result += resultCode[i];

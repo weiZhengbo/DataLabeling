@@ -5,7 +5,7 @@
 <!-- 写sql语句 -->
 <mapper namespace="com.dataLabeling.dao.RecordDao">
     <select id="selectCountClicked" resultType="Integer">
-        select count(*) from recordinfo where recordClassId=#{0} and appId=#{1}
+        select count(*) from recordinfo where recordClassId=#{clickwordId} and appId=#{appId}
     </select>
 
     <select id="selectCountDealed" parameterType="Integer" resultType="Integer">
@@ -20,22 +20,22 @@
         select recordinfo.*,recordclass.recordClass
         from recordinfo  join recordclass
         on recordinfo.recordClassId=recordclass.id
-        where recordinfo.appId=#{arg0}
-        order by id limit #{arg1},#{arg2}
+        where recordinfo.appId=#{appId}
+        order by id limit #{i},#{ps}
     </select>
 
     <select id="selectclickedList" resultType="RecordInfo">
         select recordinfo.*,recordclass.recordClass
         from recordinfo  join recordclass
         on recordinfo.recordClassId=recordclass.id
-        where recordclass.id=#{arg0} and recordinfo.appId=#{arg1}
-        order by id limit #{arg2},#{arg3}
+        where recordclass.id=#{clickwordId} and recordinfo.appId=#{appId}
+        order by id limit #{i},#{ps}
     </select>
 
     <select id="selectNotDealedList" resultType="RecordInfo">
         select recordinfo.* from recordinfo
-         where recordClassId=-1 and appId=#{arg0}
-         order by rand() limit #{arg1}
+         where recordClassId=-1 and appId=#{appId}
+         order by rand() limit #{ps}
     </select>
 
     <select id="findAllClasses" parameterType="Integer" resultType="RecordClass">
@@ -43,7 +43,7 @@
     </select>
 
     <select id="findMatchClasses" resultType="RecordClass">
-        select * from recordclass where appId=#{arg0} and recordClass like #{arg1} order by id
+        select * from recordclass where appId=#{appId} and recordClass like #{keyword} order by id
     </select>
 
     <select id="findRecordById" resultType="RecordInfo" parameterType="Integer">
@@ -51,7 +51,7 @@
     </select>
 
     <update id="addClassTag">
-        update recordinfo set recordClassId = #{arg1} where id =  #{arg0}
+        update recordinfo set recordClassId = #{sid} where id =  #{rid}
     </update>
 
     <update id="removeRecordClass" parameterType="Integer">
@@ -106,6 +106,6 @@
     </select>
 
     <select id="judgeSidIsInappId" resultType="Integer">
-        SELECT COUNT(*) FROM recordclass where id = #{arg0} and appId = #{arg1}
+        SELECT COUNT(*) FROM recordclass where id = #{sid} and appId = #{appId}
     </select>
 </mapper>

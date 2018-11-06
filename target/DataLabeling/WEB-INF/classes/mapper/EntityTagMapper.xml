@@ -23,7 +23,7 @@
 
     <!--查询未标记文本-->
     <select id="getNoTagList" resultType="com.dataLabeling.entity.RecordInfo">
-        select * from recordinfo where appId=#{appId} and recordClassId=#{dataType}
+        select * from recordinfo where appId=#{appId} and recordClassId=#{dataType} order by rand()
     </select>
 
 
@@ -31,4 +31,6 @@
     <update id="saveTagInfo" >
       update  recordinfo set resultRecord=#{resultRecord},resultCode=#{resultCode},recordClassId=#{recordClassId} where id=#{id}
     </update>
+
+
 </mapper>

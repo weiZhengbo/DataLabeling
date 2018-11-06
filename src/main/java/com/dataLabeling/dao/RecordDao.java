@@ -2,6 +2,7 @@ package com.dataLabeling.dao;
 
 import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ public interface RecordDao {
      * @param appId
      * @return
      */
-    int selectCountClicked(int clickwordId, Integer appId);
+    int selectCountClicked(@Param("clickwordId") int clickwordId, @Param("appId") Integer appId);
 
     /**
      * 查询已处理数据的条数
@@ -36,7 +37,7 @@ public interface RecordDao {
      * @param ps
      * @return
      */
-    List<RecordInfo> selectNoClickDealedList(Integer appId, int i, int ps);
+    List<RecordInfo> selectNoClickDealedList(@Param("appId") Integer appId, @Param("i") int i, @Param("ps") int ps);
 
     /**
      * 分页查询某个类别下的记录
@@ -46,7 +47,7 @@ public interface RecordDao {
      * @param ps
      * @return
      */
-    List<RecordInfo> selectclickedList(int clickwordId, Integer appId, int i, int ps);
+    List<RecordInfo> selectclickedList(@Param("clickwordId") int clickwordId, @Param("appId") Integer appId, @Param("i") int i, @Param("ps") int ps);
 
     /**
      * 查询未处理的记录
@@ -54,7 +55,7 @@ public interface RecordDao {
      * @param ps
      * @return
      */
-    List<RecordInfo> selectNotDealedList(Integer appId, int ps);
+    List<RecordInfo> selectNotDealedList(@Param("appId") Integer appId, @Param("ps") int ps);
 
     /**
      * 查询出某个app下的所有recordclass
@@ -69,7 +70,7 @@ public interface RecordDao {
      * @param keyword
      * @return
      */
-    List<RecordClass> findMatchClasses(int appId, String keyword);
+    List<RecordClass> findMatchClasses(@Param("appId") int appId, @Param("keyword") String keyword);
 
     /**
      * 根据id查询Record
@@ -83,7 +84,7 @@ public interface RecordDao {
      * @param rid
      * @param sid
      */
-    void addClassTag(Integer rid, Integer sid);
+    void addClassTag(@Param("rid") Integer rid, @Param("sid") Integer sid);
 
     /**
      * 移除某个record的class
@@ -149,5 +150,5 @@ public interface RecordDao {
      * @param appId
      * @return
      */
-    int judgeSidIsInappId(Integer sid, Integer appId);
+    int judgeSidIsInappId(@Param("sid") Integer sid, @Param("appId") Integer appId);
 }

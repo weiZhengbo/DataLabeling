@@ -68,19 +68,22 @@
     <tr><th>序号</th><th>文本</th><th>标记</th><th></th></tr>
 <c:forEach var="info" items="${pageResource.list }" varStatus="status">
     <tr>
-    <td>${ status.index + 1}</td>
-        <td > <div  id="record${status.index + 1}">${info.resultRecord }</div></td>
-        <td width="20%"><input class="btn btn-primary" onclick="getSelect('record${ status.index + 1}',${info.id})" type="button" value="标记"/>
-            <input class="btn btn-primary" onclick="cancelSelect('record${ status.index + 1}',${info.id})" type="button" value="取消"/></td>
+    <td>${ info.id}</td>
+        <td > <div  id="record${info.id}">${info.resultRecord }</div></td>
+        <td width="20%"><input class="btn btn-primary" onclick="getSelect('record${info.id}',${info.id})" type="button" value="标记"/>
+            <input class="btn btn-primary" onclick="cancelSelect('record${info.id}',${info.id})" type="button" value="取消"/></td>
     </tr>
     <tr>
         <td></td>
-        <td ><div id="record${status.index + 1}Code">${info.resultCode}</div></td>
+        <td ><div id="record${info.id}Code">${info.resultCode}</div></td>
         <td></td>
     </tr>
 </c:forEach>
 </table>
-<jsp:include page="page.jsp"></jsp:include>
+    <c:if test="${dataType eq 0 }">
+        <jsp:include page="page.jsp"></jsp:include>
+    </c:if>
+
 </div>
 <div class="right-table  col-lg-3 col-md-3 col-sm-3 col-xs-3" >
             <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden;">
