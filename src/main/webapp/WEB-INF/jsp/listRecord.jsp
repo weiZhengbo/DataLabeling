@@ -181,4 +181,5 @@
 </div>
 </body>
 <script type="text/javascript" src="${ctx }/js/listRecord.js"></script>
+<script type="text/javascript" src='${ctx }/js/bootstrap.min.js'></script>
 </html>

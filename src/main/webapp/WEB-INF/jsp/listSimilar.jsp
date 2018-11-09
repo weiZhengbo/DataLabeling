@@ -172,4 +172,5 @@
 </div>
 </body>
 <script type="application/javascript" src="${ctx }/js/listSimilar.js"></script>
+<script type="text/javascript" src='${ctx }/js/bootstrap.min.js'></script>
 </html>
