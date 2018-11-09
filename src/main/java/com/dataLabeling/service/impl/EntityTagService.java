@@ -22,20 +22,20 @@ public class EntityTagService implements IEntityTagService {
 	}
 
 	@Override
-	public void saveFileContent(String[] list, RecordInfo recordInfo) {
+	public void saveFileContent(List<String> list, RecordInfo recordInfo) {
 		for(String str: list) {
 			if("".equals(str)){
 				continue;
 			}
 			String md5 = CommonUtil.getMd5(str);
-			int count = entityTagMapper.getCountByMd5(md5,recordInfo.getAppId());
+			int count = entityTagMapper.getCountByMd5(md5+recordInfo.getAppId(),recordInfo.getAppId());
 			if(count==0) {
 				StringBuffer resultCode = new StringBuffer();
 				recordInfo.setChatRecord(str);
 				recordInfo.setResultRecord(str);
-				recordInfo.setRecordMd5(md5);
+				recordInfo.setRecordMd5(md5+recordInfo.getAppId());
 				for(int i=0; i<str.length();i++){
-					resultCode.append("N");
+					resultCode.append("O");
 					if(i!=str.length()-1){
 						resultCode.append(" " );
 					}
@@ -60,4 +60,5 @@ public class EntityTagService implements IEntityTagService {
 	public void saveTagInfo(RecordInfo recordInfo) {
 		entityTagMapper.saveTagInfo(recordInfo);
 	}
+
 }

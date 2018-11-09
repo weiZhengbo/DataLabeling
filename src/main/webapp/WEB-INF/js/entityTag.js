@@ -5,7 +5,27 @@ $(document).ready(function () {
         $(obj).parent().css('background-color','bisque');
         $("#classId").val($(obj).text());
         $("#classCode").val(obj2.text());
-    })
+    });
+    var i = 0;
+    $("#recordTable tbody tr").each(function(){;
+        var obj;
+        var obj1;
+        var text;
+        debugger;
+        if(i%2==0){
+            obj = $(this).find('div').eq(0);
+            obj1 = $(this).find('div').eq(1);
+            text=$(obj1).text();
+            var kg = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+
+                "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+            debugger;
+            var reg = new RegExp(kg,"g");
+            var html = text.replace(/O /g,"&nbsp&nbsp").replace("&nbspO","&nbsp&nbsp").replace(" O","&nbsp&nbsp")
+                .replace(reg,kg+"<br/>");
+            $(obj).html(html);
+        }
+        i++;
+         });
 });
 
 /**
@@ -51,9 +71,9 @@ function addClass() {
         $.get(reqUrl,function (data) {
             //var data = eval("("+data+")");
             var tr = ' <tr draggable="true" ondragstart="drag(event)" id="sid${tClasses.id}">'
-                +'<td onclick="chooseTag('+data.id+')">'+data.id+'</td>'
-                +'<td onclick="chooseTag('+data.id+')">'+data.recordClass+'</td>'
-                +'<td onclick="deleteTag('+data.id+','+data.recordClass+')">'
+                +'<td onclick="chooseTag('+data.id+',\''+data.recordClass+'\',this)">'+data.id+'</td>'
+                +'<td onclick="chooseTag('+data.id+',\''+data.recordClass+'\',this)">'+data.recordClass+'</td>'
+                +'<td onclick="deleteTag('+data.id+',\''+data.recordClass+'\',this)">'
                 +'<i class="glyphicon glyphicon-remove" ></i> </td> </tr>';
             $("#classTable tbody").append(tr);
         })
@@ -97,6 +117,7 @@ function getSelect(id,infoId) {
     var start = range.startOffset;
     var end = range.endOffset;
     var text = el.innerText;
+    var html = el.innerHTML;
     var offset = 0;
     var str = '';
     var container = range.startContainer;
@@ -107,33 +128,54 @@ function getSelect(id,infoId) {
     }
     start += offset;
     end += offset;
-    if (text.substring(start, end) != selecter.toString()) {
+    if(end<start){
+        end=text.length;
+    }
+    if(text==selecter.toString().trim()){
+        start=0;
+        end=text.length;
+    }
+    debugger;
+    if (text.substring(start, end) != selecter.toString().trim()) {
         return;
     }
-
-    var node = document.createElement("span");
-    node.setAttribute("style", "color:orange");
-    node.innerHTML = selecter.toString();
-    selecter.deleteFromDocument();
-    range.insertNode(node);
+    if(end< text.length){
+        var node = document.createElement("span");
+        node.setAttribute("style", "color:orange");
+        node.innerHTML = selecter.toString();
+        selecter.deleteFromDocument();
+        range.insertNode(node);
+    }else{
+        var subffix = html.substring(0,html.length -(end-start));
+        var middel = "<span style=\"color:orange\">"+text.substring(start,end)+"</span>";
+        el.innerHTML = subffix+middel;
+    }
     var result = "";
     var classCode = $("#classCode").val();
     var resultCode = $("#" + id + "Code").text().split(" ");
+    var sub="";
+    if(classCode!=null && classCode!="") {
+        sub = "-"+classCode;
+    }
+    debugger;
     for (var i = 0; i < resultCode.length; i++) {
         if (i < start || i > end - 1) {
             result += resultCode[i];
-        } else if (i > start && i < end - 1) {
-            result += classCode + '_I';
+        } else if (i > start && i < end ) {
+            result += 'I'+sub;
         } else if (i == start) {
-            result += classCode + '_B';
-        } else if (i == end - 1) {
-            result += classCode + '_O';
+            result += 'B' + sub;
         }
         if (i != resultCode.length - 1) {
             result += ' '
         }
     }
+    debugger;
+    var kg = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+
+        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+    var reg = new RegExp(kg,"g");
     $("#" + id + "Code").text(result);
+    $("#" + id + "Code1").html(result.replace(/O /g,"&nbsp&nbsp").replace("&nbspO","&nbsp&nbsp").replace(" O","&nbsp&nbsp").replace(reg,kg+"<br/>"));
     //存入数据库
     $.ajax({
         url: "saveTagInfo.action",
@@ -161,12 +203,13 @@ function cancelSelect(id,infoId){
     var text = $("#"+id).text();
     var resultCode = "";
     for (var i = 0; i < text.length; i++) {
-        resultCode+="N";
+        resultCode+="O";
         if(i != text.length-1){
             resultCode +=" ";
         }
     }
-    $("#" + id + "Code").text(resultCode);
+    $("#" + id + "Code").text(resultCode)
+    $("#" + id + "Code1").text("");
     $("#" + id).text(text);
     //存入数据库
     $.ajax({
@@ -212,4 +255,8 @@ function getUrl(change,value) {
     reqUrl=reqUrl+"&appId="+appId+"&dataType="+dataType;
 
     window.location.href=reqUrl;
+}
+
+function reloadPage(){
+    location.reload();
 }

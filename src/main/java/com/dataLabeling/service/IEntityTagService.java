@@ -12,9 +12,10 @@ public interface IEntityTagService {
 	public List<String> getAllProject();
 
 
-	public void saveFileContent(String[] list, RecordInfo recordInfo);
+	public void saveFileContent(List<String> list, RecordInfo recordInfo);
 
     public List<RecordInfo> getNoTagList(Integer appId, Integer dataType);
 
     void saveTagInfo(RecordInfo recordInfo);
+
 }

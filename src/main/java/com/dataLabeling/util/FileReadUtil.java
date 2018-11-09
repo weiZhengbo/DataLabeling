@@ -2,6 +2,7 @@ package com.dataLabeling.util;
 
 import com.dataLabeling.entity.RecordInfo;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -9,8 +10,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileReadUtil {
@@ -20,20 +21,20 @@ public class FileReadUtil {
      * @param file
      * @return
      */
-    public static String readTxt(File file){
+    public static List<String>  readTxt(File file){
 
-        StringBuilder result = new StringBuilder();
+        List<String> result = new ArrayList<String>();
         try{
             BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
             String s = null;
             while((s = br.readLine())!=null){//使用readLine方法，一次读一行
-                result.append(s);
+                result.add(s);
             }
             br.close();
         }catch(Exception e){
             e.printStackTrace();
         }
-        return result.toString().trim();
+        return result;
     }
 
     /**
@@ -42,14 +43,12 @@ public class FileReadUtil {
      * @return
      * @throws IOException
      */
-    public static String readExcel(File file) throws IOException {
-        String fileName = file.getName();
-        StringBuilder result = new StringBuilder();
+    public static List<String> readExcel(File file,String fileName) throws IOException {
+        List<String> result = new ArrayList<String>();
         Workbook wb;
         //根据文件后缀（xls/xlsx）进行判断
         if ( fileName.endsWith("xls")  || fileName.endsWith("csv")){
-            FileInputStream fiStream = new FileInputStream(file);   //文件流对象
-            wb = new HSSFWorkbook(fiStream);
+            wb = new HSSFWorkbook(new FileInputStream(file));
         }else{
             wb = new XSSFWorkbook(new FileInputStream(file));
         }
@@ -66,16 +65,38 @@ public class FileReadUtil {
              //   for (int cIndex = firstCellIndex; cIndex < lastCellIndex; cIndex++) {   //遍历列
                     Cell cell = row.getCell(firstCellIndex);
                     if (cell != null) {
-                        result.append(cell.toString());
-                        System.out.print(cell.toString() + "    ");
+                        result.add(cell.toString());
                     }
                 //}
             }
         }
-        return result.toString();
+        return result;
     }
 
-    public static File exportTxt(List<RecordInfo> list, HttpServletRequest request) throws IOException {
+    /**
+     * 读取csv文件
+     * @param file
+     * @return
+     */
+    public static List<String>  readCsv(File file){
+        List<String> result = new ArrayList<String>();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            String line = null;
+            int num = 0;
+                while((line = br.readLine())!=null) {//使用readLine方法，一次读一行
+                    num ++;
+                    String item[] = line.split(",");//CSV格式文件为逗号分隔符文件，这里根据逗号切分
+                    result.add(item[0].toString());
+                }
+            br.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return result;
+    }
+
+    public static File exportTxt(List<RecordInfo> list) throws IOException {
 
         String filenameTemp = "D:\\实体标注结果.txt";
         File filename = new File(filenameTemp);
@@ -85,21 +106,21 @@ public class FileReadUtil {
         }
         // 文件路径
         File file = new File(filenameTemp);
-
-        BufferedWriter out = new BufferedWriter(new FileWriter(file));
+        PrintWriter out = new PrintWriter(filenameTemp, "UTF-8");
         for(RecordInfo recordInfo:list){
+            System.out.println(recordInfo.getResultCode());
             for(int i = 0 ;i < recordInfo.getChatRecord().length();i++){
                 String[] str = recordInfo.getResultCode().split(" ");
                 System.out.println(recordInfo.getChatRecord().charAt(i));
-                out.write(recordInfo.getChatRecord().charAt(i)+"\t");
-                out.write(str[i]+"\r\n"); // \r\n即为换行
+                out.print(recordInfo.getChatRecord().charAt(i)+"\t");
+                System.out.println(str[i]);
+                out.print(str[i]+"\r\n"); // \r\n即为换行
             }
-            out.write("\r\n");
+            out.print("\r\n");
         }
 
         out.flush(); // 把缓存区内容压入文件
         out.close(); // 最后记得关闭文件
-
         return file;
     }
 }

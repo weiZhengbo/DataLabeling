@@ -64,23 +64,38 @@
     </div>
 </div>
 <div class="col-md-9 col-lg-9 col-sm-9 col-xs-9">
-    <table id="recordTable" class="table table-striped maintable" style="margin-bottom: 0">
-    <tr><th>序号</th><th>文本</th><th>标记</th><th></th></tr>
+    <table id="recordTable" class="table table-striped maintable" style="margin-bottom: 0;table-layout: fixed;word-break: break-all;">
+    <tr><th width="10%">序号</th><th width="70%">文本</th><th width="20%">标记</th></tr>
 <c:forEach var="info" items="${pageResource.list }" varStatus="status">
     <tr>
-    <td>${ status.index + 1}</td>
-        <td > <div  id="record${status.index + 1}">${info.resultRecord }</div></td>
-        <td width="20%"><input class="btn btn-primary" onclick="getSelect('record${ status.index + 1}',${info.id})" type="button" value="标记"/>
-            <input class="btn btn-primary" onclick="cancelSelect('record${ status.index + 1}',${info.id})" type="button" value="取消"/></td>
+    <td>${ info.id}</td>
+        <td > <div  id="record${info.id}">${info.resultRecord }</div></td>
+        <td ><input class="btn btn-primary" onclick="getSelect('record${info.id}',${info.id})" type="button" value="标记"/>
+            <input class="btn btn-primary" onclick="cancelSelect('record${info.id}',${info.id})" type="button" value="取消"/></td>
     </tr>
     <tr>
         <td></td>
-        <td ><div id="record${status.index + 1}Code">${info.resultCode}</div></td>
+        <td width="65%"><div id="record${info.id}Code1" style="table-layout:fixed; display:inline">${info.resultCode}</div>
+            <div id="record${info.id}Code" style="display:none;">${info.resultCode}</div>
+        </td>
         <td></td>
     </tr>
 </c:forEach>
 </table>
-<jsp:include page="page.jsp"></jsp:include>
+    <c:if test="${dataType eq 0 }">
+        <jsp:include page="page.jsp"></jsp:include>
+    </c:if>
+    <c:if test="${dataType eq -1 }">
+        <nav aria-label="Page navigation" style="margin-bottom: 30px">
+        <ul class="pagination" style="float: right;">
+                <li>
+                    <a href="javascript:void(0);" onclick="reloadPage()" aria-label="Next">
+                        <span aria-hidden="true">»»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </c:if>
 </div>
 <div class="right-table  col-lg-3 col-md-3 col-sm-3 col-xs-3" >
             <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden;">

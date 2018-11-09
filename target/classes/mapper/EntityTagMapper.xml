@@ -23,7 +23,13 @@
 
     <!--查询未标记文本-->
     <select id="getNoTagList" resultType="com.dataLabeling.entity.RecordInfo">
-        select * from recordinfo where appId=#{appId} and recordClassId=#{dataType} order by rand()
+        select * from recordinfo where appId=#{appId} and recordClassId=#{dataType}
+        <if test="dataType != 0" >
+        order by rand()
+        </if>
+        <if test="dataType == 0" >
+            order by id
+        </if>
     </select>
 
 
