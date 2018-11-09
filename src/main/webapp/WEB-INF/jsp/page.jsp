@@ -35,7 +35,7 @@
         <c:when test="${pb.dataType eq 'notdeal' }">
             <ul class="pagination" style="float: right;">
                 <li>
-                    <a href = "javascript:void(0);" onclick="getUrl('dataType','notdeal')" aria-label="Next" >
+                    <a href = "javascript:void(0);" onclick="getUrl('refresh','yes')" aria-label="Next" >
                         <span aria-hidden="true" >&raquo;&raquo;</span>
                     </a>
                 </li>
