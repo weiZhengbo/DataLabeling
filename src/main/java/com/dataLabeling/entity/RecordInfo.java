@@ -14,8 +14,14 @@ public class RecordInfo {
     private String fileName;
     //访客记录文本
     private String chatRecord;
+    //文本标注结果
+    private String resultRecord;
+    //文本标注结果编码
+    private String resultCode;
     //访客记录文本类别
     private String recordClass;
+    //方可记录文本id
+    private Integer recordClassId;
     //原始时间戳
     private Date recordTime;
 
@@ -85,5 +91,29 @@ public class RecordInfo {
 
     public void setAppId(Integer appId) {
         this.appId = appId;
+    }
+
+    public String getResultRecord() {
+        return resultRecord;
+    }
+
+    public void setResultRecord(String resultRecord) {
+        this.resultRecord = resultRecord;
+    }
+
+    public String getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public Integer getRecordClassId() {
+        return recordClassId;
+    }
+
+    public void setRecordClassId(Integer recordClassId) {
+        this.recordClassId = recordClassId;
     }
 }

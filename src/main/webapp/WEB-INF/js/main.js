@@ -31,6 +31,8 @@ function showAppDetail(appId,that) {
 
     }else if(laststr == '相似标注'){
         var reqUrl = urlHead+"/SimilarController/findAll?appId="+appId;
+    }else if(laststr == '实体标注'){
+        var reqUrl = urlHead+"/entityTag/getTaglist?appId="+appId+"&&dataType=-1";
     }
     $('#mainframe').attr('src',reqUrl);
     // window.location.href=reqUrl;
@@ -52,6 +54,8 @@ function addNewRecordClassProject(appType) {
             appName=appName+'-分类标注';
         }else if(appType=='2'){
             appName=appName+'-相似标注';
+        }else if(appType=='3'){
+            appName=appName+'-实体标注';
         }
         var reqUrl = urlHead+'/Application/addNewApplication?projectId='+pid+'&appType='+appType+'&appName='+appName;
         $.get(reqUrl,function (data) {
