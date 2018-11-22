@@ -13,5 +13,5 @@ public interface SimilarDao {
      * @param noHandledWord
      * @return
      */
-    List<RecordInfo> selectNotDealedAndSearchedList(@Param("appId") Integer appId, @Param("ps") int ps, @Param("noHandledWord") String noHandledWord);
+    List<RecordInfo> selectNotDealedAndSearchedList(@Param("appId") Integer appId, @Param("ps") int ps, @Param("noHandledWord") String[] noHandledWord);
 }

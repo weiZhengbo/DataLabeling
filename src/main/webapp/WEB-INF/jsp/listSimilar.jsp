@@ -16,26 +16,24 @@
 <body>
 <div>
     <form style="float:left">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="float: left;padding-left: 3%;">
         <c:choose>
             <c:when test="${pb.dataType eq 'notdeal' }">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="float: left;padding-left: 3%;">
                         <input type="radio" name="data" value="dealed" onclick="getUrl('dataType','dealed')">已标注数据&nbsp;&nbsp;
                         <input type="radio" name="data" value="notdeal" checked onclick="getUrl('dataType','notdeal')">未标注数据
-                    </div>
-                    <div class="input-group col-lg-3 col-md-3 col-sm-3 col-xs-3"  style="line-height: 33px;margin-left: 48%">
-                        <input type="text" class="form-control inleKeyword" placeholder="搜索" aria-describedby="basic-addon3" value="${pb.noHandledWord}">
-                        <span class="input-group-addon iparent" id="basic-addon3" ><i class="glyphicon glyphicon-search" onclick="getUrl('noHandledWord',this)"></i></span>
-                    </div>
-                </div>
             </c:when>
             <c:otherwise>
-                &nbsp;&nbsp;
                 <input type="radio" name="data" value="dealed" onclick="getUrl('dataType','dealed')" checked style="padding-left: 3%;">已标注数据
-                &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" name="data" value="notdeal"  onclick="getUrl('dataType','notdeal')">未标注数据
             </c:otherwise>
         </c:choose>
+        </div>
+        <div class="input-group col-lg-3 col-md-3 col-sm-3 col-xs-3"  style="line-height: 33px;margin-left: 48%">
+            <input type="text" class="form-control inleKeyword" placeholder="搜索" aria-describedby="basic-addon3" value="${pb.noHandledWord}">
+            <span class="input-group-addon iparent" id="basic-addon3" ><i class="glyphicon glyphicon-search" onclick="getUrl('noHandledWord',this)"></i></span>
+        </div>
+        </div>
     </form>
     <div style='clear:both'></div>
 </div>

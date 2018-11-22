@@ -21,9 +21,10 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public void findAll(PageBean<RecordClass> pb, int clickwordId) {
         int tr = -1;
+        String noHandledWord[]=null;
         if (pb.getDataType().equals("dealed")){
             if (clickwordId==-1){
-                tr = recordDao.selectCountDealed(pb.getAppId());
+                tr = recordDao.selectCountDealed(pb.getAppId(), noHandledWord);
             }else {
                 tr = recordDao.selectCountClicked(clickwordId,pb.getAppId());
             }
@@ -38,7 +39,7 @@ public class RecordServiceImpl implements RecordService {
         List<RecordInfo> beanList = null;
         if (pb.getDataType().equals("dealed")){
             if (clickwordId==-1){
-                beanList = recordDao.selectNoClickDealedList(pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs());
+                beanList = recordDao.selectNoClickDealedList(pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs(), noHandledWord);
             }else {
                 beanList = recordDao.selectclickedList(clickwordId,pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs());
             }

@@ -9,7 +9,11 @@
     </select>
 
     <select id="selectCountDealed" parameterType="Integer" resultType="Integer">
-        select count(*) from recordinfo where recordClassId!=-1 and appId=#{appId}
+        select count(*) from recordinfo where recordClassId!=-1
+        <foreach collection="noHandledWord" index="index" item="item" open=" and ( chatRecord like" close=" )" separator="or chatRecord like">
+            concat(concat('%',#{item}),'%')
+        </foreach>
+        and appId=#{appId}
     </select>
 
     <select id="selectRecordClassById" parameterType="Integer" resultType="RecordClass">
@@ -21,6 +25,9 @@
         from recordinfo  join recordclass
         on recordinfo.recordClassId=recordclass.id
         where recordinfo.appId=#{appId}
+        <foreach collection="noHandledWord" index="index" item="item" open=" and ( chatRecord like" close=" )" separator="or chatRecord like">
+            concat(concat('%',#{item}),'%')
+        </foreach>
         order by id limit #{i},#{ps}
     </select>
 
