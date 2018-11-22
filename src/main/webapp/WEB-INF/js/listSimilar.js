@@ -113,16 +113,15 @@ function drop_handler(event) {
     var similarId = $('#'+tr).children().eq(0).text();
     var data = $('#'+tr).children().eq(1).text();
     var rid = $td.parents('tr').children().first().text();
-    $td.html(data);
     var url  = decodeURI(window.location.search.substr(1));
     var appId = getQueryString(url,'appId');
     var url1  = document.URL;
-    var urlHead = url1.substring(0,url1.lastIndexOf('/'));
     var head1 = url1.substring(0,url1.lastIndexOf('/'));
     var head = head1.substring(0,head1.lastIndexOf('/'));
     var reqUrl = head+"/RecordController/addRecordClass?rid="+rid+"&sid="+similarId+"&appId="+appId;
-    $.get(reqUrl,function (data,status) {
-        if(data){
+    $.get(reqUrl,function (data1,status) {
+        if(data1){
+            $td.html(data);
             $td.next().html("<i class='glyphicon glyphicon-remove' onclick='javascript:similarTagRemove("+rid+",this)'></i>");
         }else {
             alert("输入编号有误");

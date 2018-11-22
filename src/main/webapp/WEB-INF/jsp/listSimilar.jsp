@@ -156,7 +156,7 @@
             <c:forEach items="${pb.TClasses }" var="tclass">
                 <tr draggable="true" ondragstart="drag(event)" id="sid${tclass.id}">
                     <td onclick="getUrl('clickwordId',${tclass.id})">${tclass.id}</td>
-                    <td onclick="getUrl('clickwordId',${tclass.id})">${tclass.recordClass}</td>
+                    <td onclick="getUrl('clickwordId',${tclass.id})" style="margin-bottom: 0;table-layout: fixed;word-break: break-all;">${tclass.recordClass}</td>
                     <td onclick="similarTagDelete(${tclass.id},'${tclass.recordClass}')">
                         <i class='glyphicon glyphicon-remove' ></i>
                     </td>
