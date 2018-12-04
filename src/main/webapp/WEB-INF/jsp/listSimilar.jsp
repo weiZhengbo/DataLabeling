@@ -15,7 +15,7 @@
 </head>
 <body>
 <div>
-    <form style="float:left">
+    <div style="float:left" >
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="float: left;padding-left: 3%;">
         <c:choose>
@@ -30,11 +30,11 @@
         </c:choose>
         </div>
         <div class="input-group col-lg-3 col-md-3 col-sm-3 col-xs-3"  style="line-height: 33px;margin-left: 48%">
-            <input type="text" class="form-control inleKeyword" placeholder="搜索" aria-describedby="basic-addon3" value="${pb.noHandledWord}">
+            <input type="text" class="form-control inleKeyword" placeholder="搜索" aria-describedby="basic-addon3" value="${pb.noHandledWord}" onkeydown="keyDown(event,this)">
             <span class="input-group-addon iparent" id="basic-addon3" ><i class="glyphicon glyphicon-search" onclick="getUrl('noHandledWord',this)"></i></span>
         </div>
         </div>
-    </form>
+    </div>
     <div style='clear:both'></div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
@@ -147,7 +147,7 @@
 </div>
 <div class="right-table col-lg-3 col-md-3 col-sm-3 col-xs-3">
     <div class="input-group">
-        <input type="text" class="form-control inKeyword" placeholder="搜索" aria-describedby="basic-addon2" value="${pb.keyword}">
+        <input type="text" class="form-control inKeyword" placeholder="搜索" aria-describedby="basic-addon2" value="${pb.keyword}" onkeydown="keyDown(event,this)">
         <span class="input-group-addon iparent" id="basic-addon2" ><i class="glyphicon glyphicon-search" onclick="getUrl('keyword',this)"></i></span>
     </div>
     <div class="table-content" style="border: 1px solid #eee;height: 300px;overflow-y: scroll;overflow-x: hidden">

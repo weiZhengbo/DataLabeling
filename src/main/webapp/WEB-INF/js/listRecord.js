@@ -148,6 +148,7 @@ function drop_handler(event) {
     var url1  = document.URL;
     var urlHead = url1.substring(0,url1.lastIndexOf('/'));
     var reqUrl = urlHead+"/addRecordClass?rid="+rid+"&sid="+similarId+"&appId="+appId;
+    debugger;
     $.get(reqUrl,function (data1,status) {
         if(data1){
             $td.html(data);
@@ -274,5 +275,15 @@ function addClass() {
         $.get(reqUrl,function (data) {
             getUrl('refresh','no');
         })
+    }
+}
+
+function keyDown(e,obj){
+    var ev= window.event||e;
+
+//13是键盘上面固定的回车键
+    if (ev.keyCode == 13) {
+        debugger;
+        $(obj).next().find('i')[0].click();
     }
 }

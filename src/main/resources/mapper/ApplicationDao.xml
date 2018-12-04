@@ -13,4 +13,20 @@
         </selectKey>
         insert into app(appName,projectId,appType) values(#{appName},#{projectId},#{appType})
     </insert>
+
+    <update id="updateApplications"  parameterType="Application">
+        update app set appName=#{appName} where id=#{id}
+    </update>
+
+    <delete id="deleteApplications">
+        delete from app where id=#{id}
+    </delete>
+
+    <delete id="deleteInfo">
+        delete from recordInfo where appId=#{id}
+    </delete>
+
+    <delete id="deleteClass">
+        delete from recordClass where appId=#{id}
+    </delete>
 </mapper>

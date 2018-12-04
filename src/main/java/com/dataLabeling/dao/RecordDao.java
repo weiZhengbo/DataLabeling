@@ -72,7 +72,7 @@ public interface RecordDao {
      * @param keyword
      * @return
      */
-    List<RecordClass> findMatchClasses(@Param("appId") int appId, @Param("keyword") String keyword);
+    List<RecordClass> findMatchClasses(@Param("appId") int appId, @Param("keyword") String[] keyword);
 
     /**
      * 根据id查询Record

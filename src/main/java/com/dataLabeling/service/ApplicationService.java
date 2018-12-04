@@ -17,4 +17,8 @@ public interface ApplicationService {
      * @param application
      */
     public void addNewApplication(Application application);
+
+    public void updateApplications(Application application);
+
+    void deleteApplications(Integer id);
 }

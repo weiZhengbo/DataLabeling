@@ -21,7 +21,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public void findAll(PageBean<RecordClass> pb, int clickwordId) {
         int tr = -1;
-        String noHandledWord[]=null;
+        String noHandledWord[] =  "".split("\\|");
         if (pb.getDataType().equals("dealed")){
             if (clickwordId==-1){
                 tr = recordDao.selectCountDealed(pb.getAppId(), noHandledWord);
@@ -63,8 +63,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<RecordClass> findMatchClasses(int appId, String keyword) {
-        keyword = "%"+keyword+"%";
-        return recordDao.findMatchClasses(appId,keyword);
+        String word[] =  keyword.split("\\|");
+        return recordDao.findMatchClasses(appId,word);
     }
 
     @Override

@@ -73,3 +73,76 @@ function iFrameHeight(id) {
         ifm.width = subWeb.body.scrollWidth;
     }
 }
+
+function manageApplication(){
+    var url1  = document.URL;
+    var url  = decodeURI(window.location.search.substr(1));
+    var pid = getQueryString(url,"pid");
+    var urlHead = url1.substring(0,url1.indexOf('DataLabeling'))+'DataLabeling';
+    url=urlHead+'/Application/manageApplications?pid='+pid;
+    $.dialog({
+        id:"dlg1",
+        title:"标注项目管理",
+        content:"url:"+url,
+        width:600,
+        height:400,
+        min:false,
+        max:false,
+        background:"#000",
+        opacity:0.2,
+        lock:true,
+        close:function() {
+            location.reload();
+        },
+        button: [
+            {
+                name: '关闭'
+            }
+        ]
+    });
+}
+var bak;
+function editApp(id,appId){
+    debugger;
+    var value = $("#"+id).text();
+    $("#"+id).replaceWith("<input type='text' id='"+id+"'value='"+value+"' onblur='change(\""+id+"\","+appId+")'/>");
+    $("#"+id).focus();
+    bak=value;
+}
+
+/**
+ * 修改名称
+ * @param id
+ * @param appId
+ */
+function change(id,appId){
+    var newName = $("#"+id).val();
+    if(newName=="" || newName==null){
+        alert("名称不能为空！");
+        $("#"+id).replaceWith('<span  id="appName'+appId+'">'+bak+'</span>')
+        return;
+    }
+    $.post("updateApp.action",
+        {
+            appName:newName,
+            id:appId
+        },
+        function(data){
+            alert(data);
+            location.reload();
+        });
+}
+
+function delApp(id,appName){
+    if(confirm("确定要删除"+appName+"吗（删除后不可恢复）？"))
+    {
+        $.post("deleteApp.action",
+            {
+                id:id
+            },
+            function(data){
+                alert(data);
+                location.reload();
+            });
+    }
+}

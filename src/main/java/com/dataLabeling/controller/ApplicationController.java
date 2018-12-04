@@ -42,4 +42,32 @@ public class ApplicationController {
         applicationService.addNewApplication(application);
         return application;
     }
+
+    /**
+     * 管理所有的application
+     * @param pid
+     * @param model
+     * @return
+     */
+    @RequestMapping("/manageApplications")
+    public String manageApplications(Integer pid, Model model){
+        List<Application> applications = applicationService.loadApplications(pid);
+        model.addAttribute("applications",applications);
+        return "manageApp";
+    }
+
+    @RequestMapping("/updateApp")
+    @ResponseBody
+    public String updateApp(Application application){
+        applicationService.updateApplications(application);
+        return "修改成功";
+    }
+
+    @RequestMapping("/deleteApp")
+    @ResponseBody
+    public String deleteApp(Integer id){
+        applicationService.deleteApplications(id);
+        return "删除成功";
+    }
+
 }

@@ -17,4 +17,12 @@ public interface ApplicationDao {
      * @param application
      */
     public void addNewApplication(Application application);
+
+    void updateApplications(Application application);
+
+    void deleteApplications(Integer id);
+
+    void deleteInfo(Integer id);
+
+    void deleteClass(Integer id);
 }

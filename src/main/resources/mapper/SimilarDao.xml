@@ -9,7 +9,7 @@
         select recordinfo.* from recordinfo
         where recordClassId=-1 and appId=#{appId}
         <if test="noHandledWord != null">
-            <foreach collection="noHandledWord" index="index" item="item" open=" and  ( chatRecord like" close=" ) " separator="or chatRecord like">
+            <foreach collection="noHandledWord" index="index" item="item" open=" and  ( chatRecord like" close=" ) " separator="and chatRecord like">
                 concat(concat('%',#{item}),'%')
             </foreach>
         </if>
