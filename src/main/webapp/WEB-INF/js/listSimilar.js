@@ -100,6 +100,7 @@ function drag(event) {
     event.dataTransfer.dropEffect = "copy";
 }
 function drop_handler(event) {
+    debugger;
     event.preventDefault();
     var tagName = event.target.tagName;
     var $td = null;
@@ -143,12 +144,11 @@ function getUrl(change,value) {
     var noHandledWord = getQueryString(url,'noHandledWord');
     var appId = getQueryString(url,'appId');
     var dataType = getQueryString(url,'dataType');
-
     var reqUrl = head;
     if (change=='pc'){
         if(dataType=='dealed'){
             reqUrl=reqUrl+'?pc='+value;
-            reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=yes';
+            reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=yes'+'&noHandledWord='+noHandledWord;
         }else {
             reqUrl=reqUrl+'?pc='+value;
             reqUrl=reqUrl+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&refresh=no'+'&noHandledWord='+noHandledWord;
@@ -168,6 +168,9 @@ function getUrl(change,value) {
         reqUrl=reqUrl+'?refresh='+value;
         reqUrl=reqUrl+'&pc='+pc+'&clickwordId='+clickwordId+'&keyword='+keyword+"&appId="+appId+"&dataType="+dataType+'&noHandledWord='+noHandledWord;
     }else if (change=='noHandledWord'){
+        if(dataType=='dealed') {
+            pc=1;
+        }
         var $i=$(value);
         var txt = $i.parents('span').siblings('input').val();
         reqUrl=reqUrl+'?noHandledWord='+txt;
@@ -259,5 +262,15 @@ function addClass() {
         $.get(reqUrl,function (data) {
             getUrl("refresh",'no');
         })
+    }
+}
+
+function keyDown(e,obj){
+    var ev= window.event||e;
+
+//13是键盘上面固定的回车键
+    if (ev.keyCode == 13) {
+        debugger;
+        $(obj).next().find('i')[0].click();
     }
 }

@@ -5,7 +5,7 @@ package com.dataLabeling.entity;
  */
 public class QueryVO {
     private String pc;//表格当前页码 page code
-    private String noHandledWord;//相似性 搜索的未处理的关键字
+    private String noHandledWord;//相似性 搜索的关键字
     private String appId;//应用id
     private String clickwordId;//用户点击关键词的id
     private String dataType;//请求数据类型 是已处理还是未处理

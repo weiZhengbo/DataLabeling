@@ -7,6 +7,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>首页</title>
 </head>
+<script>
+    // skin demo
+    (function(){
+        var _skin, _lhgcore;
+        var _search = window.location.search;
+        if (_search) {
+            _skin = _search.split('demoSkin=')[1];
+        };
+
+        document.write('<scr'+'ipt src="${ctx }/js/lhgcore/lhgcore.lhgdialog.min.js?skin=' + (_skin || 'qq2011') +'"></sc'+'ript>');
+        window._isDemoSkin = !!_skin;
+    })();
+</script>
 <body>
 <!-- 左侧菜单 -->
 <div class="container" style="margin-top: 30px">
@@ -17,6 +30,7 @@
             <li id="${application.id}" onclick="showAppDetail(${application.id},this)"><a>${application.appName}</a></li>
         </c:forEach>
     </ul>
+    <button class="btn bg-success" style="margin-top: 10px;" onclick="manageApplication()">所有标注项目管理</button>
     <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(1)">新增分类标注项目</button>
     <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(2)">新增相似标注项目</button>
     <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(3)">新增实体标注项目</button>

@@ -23,4 +23,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void addNewApplication(Application application) {
         applicationDao.addNewApplication(application);
     }
+
+    @Override
+    public void updateApplications(Application application) {
+        applicationDao.updateApplications(application);
+    }
+
+    @Override
+    public void deleteApplications(Integer id) {
+        applicationDao.deleteApplications(id);
+        applicationDao.deleteInfo(id);
+        applicationDao.deleteClass(id);
+    }
 }

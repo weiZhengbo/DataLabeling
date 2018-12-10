@@ -19,9 +19,10 @@ public interface RecordDao {
     /**
      * 查询已处理数据的条数
      * @param appId
+     * @param noHandledWord
      * @return
      */
-    int selectCountDealed(Integer appId);
+    int selectCountDealed( @Param("appId") Integer appId,@Param("noHandledWord") String[] noHandledWord);
 
     /**
      * 通过id查询recordclass
@@ -35,9 +36,10 @@ public interface RecordDao {
      * @param appId
      * @param i
      * @param ps
+     * @param noHandledWord
      * @return
      */
-    List<RecordInfo> selectNoClickDealedList(@Param("appId") Integer appId, @Param("i") int i, @Param("ps") int ps);
+    List<RecordInfo> selectNoClickDealedList(@Param("appId") Integer appId, @Param("i") int i, @Param("ps") int ps,@Param("noHandledWord") String[] noHandledWord);
 
     /**
      * 分页查询某个类别下的记录
@@ -70,7 +72,7 @@ public interface RecordDao {
      * @param keyword
      * @return
      */
-    List<RecordClass> findMatchClasses(@Param("appId") int appId, @Param("keyword") String keyword);
+    List<RecordClass> findMatchClasses(@Param("appId") int appId, @Param("keyword") String[] keyword);
 
     /**
      * 根据id查询Record

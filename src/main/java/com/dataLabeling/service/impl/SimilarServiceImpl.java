@@ -22,9 +22,10 @@ public class SimilarServiceImpl implements SimilarService {
     @Override
     public void findAll(PageBean<RecordClass> pb, int clickwordId) {
         int tr = -1;
+        String noHandledWord[] =  pb.getNoHandledWord().split("\\|");
         if (pb.getDataType().equals("dealed")){
             if (clickwordId==-1){
-                tr = recordDao.selectCountDealed(pb.getAppId());
+                tr = recordDao.selectCountDealed(pb.getAppId(),noHandledWord);
             }else {
                 tr = recordDao.selectCountClicked(clickwordId,pb.getAppId());
             }
@@ -39,7 +40,7 @@ public class SimilarServiceImpl implements SimilarService {
         List<RecordInfo> beanList = null;
         if (pb.getDataType().equals("dealed")){
             if (clickwordId==-1){
-                beanList = recordDao.selectNoClickDealedList(pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs());
+                beanList = recordDao.selectNoClickDealedList(pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs(),noHandledWord);
             }else {
                 beanList = recordDao.selectclickedList(clickwordId,pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs());
             }
@@ -47,7 +48,6 @@ public class SimilarServiceImpl implements SimilarService {
             if (pb.getNoHandledWord()==null||pb.getNoHandledWord().equals("")){
                 beanList = recordDao.selectNotDealedList(pb.getAppId(),pb.getPs());
             }else {
-                String noHandledWord = "%"+pb.getNoHandledWord()+"%";
                 beanList = similarDao.selectNotDealedAndSearchedList(pb.getAppId(),pb.getPs(),noHandledWord);
             }
         }
