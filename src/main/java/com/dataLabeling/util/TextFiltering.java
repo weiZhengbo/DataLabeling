@@ -38,7 +38,7 @@ public class TextFiltering implements Serializable {
             }
             reader.close();
         }catch (Exception e){
-            System.out.println("????");
+            throw new RuntimeException(e);
         }
         //过滤文本开始和结束的标点
         String pattern = "^(\\*|,|，|。|\\.|\\?|？|!|！|、)+(.*)";
@@ -76,25 +76,19 @@ public class TextFiltering implements Serializable {
         Matcher m_style;
         Pattern p_html;
         Matcher m_html;
-        try {
-            //定义script的正则表达式{或<script[^>]*?>[\\s\\S]*?<\\/script>
-            String regEx_script = "<[\\s]*?script[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?script[\\s]*?>";
-            //定义style的正则表达式{或<style[^>]*?>[\\s\\S]*?<\\/style>
-            String regEx_style = "<[\\s]*?style[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?style[\\s]*?>";
-            String regEx_html = "<[^>]+>"; // 定义HTML标签的正则表达式
-            p_script = Pattern.compile(regEx_script, Pattern.CASE_INSENSITIVE);
-            m_script = p_script.matcher(htmlStr);
-            htmlStr = m_script.replaceAll(""); // 过滤script标签
-            p_style = Pattern.compile(regEx_style, Pattern.CASE_INSENSITIVE);
-            m_style = p_style.matcher(htmlStr);
-            htmlStr = m_style.replaceAll(""); // 过滤style标签
-            p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
-            m_html = p_html.matcher(htmlStr);
-            htmlStr = m_html.replaceAll(""); // 过滤html标签
-            textStr = htmlStr;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String regEx_script = "<[\\s]*?script[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?script[\\s]*?>";
+        String regEx_style = "<[\\s]*?style[^>]*?>[\\s\\S]*?<[\\s]*?\\/[\\s]*?style[\\s]*?>";
+        String regEx_html = "<[^>]+>"; // 定义HTML标签的正则表达式
+        p_script = Pattern.compile(regEx_script, Pattern.CASE_INSENSITIVE);
+        m_script = p_script.matcher(htmlStr);
+        htmlStr = m_script.replaceAll(""); // 过滤script标签
+        p_style = Pattern.compile(regEx_style, Pattern.CASE_INSENSITIVE);
+        m_style = p_style.matcher(htmlStr);
+        htmlStr = m_style.replaceAll(""); // 过滤style标签
+        p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
+        m_html = p_html.matcher(htmlStr);
+        htmlStr = m_html.replaceAll(""); // 过滤html标签
+        textStr = htmlStr;
         return textStr;// 返回文本字符串
     }
 }
