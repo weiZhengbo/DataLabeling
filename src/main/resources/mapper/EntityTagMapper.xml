@@ -3,17 +3,17 @@
 
 <mapper namespace="com.dataLabeling.dao.EntityTagMapper">
 
-	<insert id="saveFileContent" useGeneratedKeys="true">
-
-        insert into recordinfo(chatRecord, resultRecord, resultCode,fileName, recordMd5, recordTime, appId) values (
-          #{chatRecord,jdbcType=VARCHAR},
-           #{resultRecord,jdbcType=VARCHAR},
-          #{resultCode,jdbcType=VARCHAR},
-           #{fileName,jdbcType=VARCHAR},
-           #{recordMd5,jdbcType=VARCHAR},
-          sysdate(),
-           #{appId}
-        )
+	<insert id="saveFileContent" useGeneratedKeys="true" parameterType="RecordInfo">
+        insert into recordinfo(chatRecord, resultRecord, resultCode,fileName, recordMd5, recordTime, appId) values
+        <foreach collection="recordInfoList" item="item" index="index" separator="," >
+            ( #{item.chatRecord,jdbcType=VARCHAR},
+            #{item.resultRecord,jdbcType=VARCHAR},
+            #{item.resultCode,jdbcType=VARCHAR},
+            #{item.fileName,jdbcType=VARCHAR},
+            #{item.recordMd5,jdbcType=VARCHAR},
+            sysdate(),
+            #{item.appId})
+        </foreach>
     </insert>
 
     <!--根据Md5查询-->

@@ -58,7 +58,7 @@ public class EntityTagController {
         DiskFileItem fi = (DiskFileItem)file.getFileItem();
         RecordInfo recordInfo = new RecordInfo();
         File f = fi.getStoreLocation();
-        List<String>  list=new ArrayList<String>();
+        List<String>  list;
         String fileName = file.getOriginalFilename();
         if(fileName.endsWith("txt")){
             list=FileReadUtil.readTxt(f);
