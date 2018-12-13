@@ -33,8 +33,7 @@ function uploadFile(){
         var form = new FormData(document.getElementById("fileUpload"));
         $.ajax({
             type: "POST",
-            // url:"fileUpload.action",
-            url:"http://localhost/DataLabeling/SimilarPair/fileUpload",
+            url:"fileUpload.action",
             data:form,
             cache: false,
             contentType: false,

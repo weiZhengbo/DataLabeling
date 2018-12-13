@@ -4,7 +4,7 @@ package com.dataLabeling.service.impl;
 import com.dataLabeling.dao.EntityTagMapper;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.IEntityTagService;
-import com.dataLabeling.util.CommonUtil;
+import com.dataLabeling.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,12 @@ public class EntityTagService implements IEntityTagService {
 			if("".equals(str)){
 				continue;
 			}
-			String md5 = CommonUtil.getMd5(str);
+			String md5 = null;
+			try {
+				md5 = CommonUtils.getMD5Str(str);
+			} catch (Exception e) {
+				new RuntimeException("md5获取失败");
+			}
 			int count = entityTagMapper.getCountByMd5(md5+recordInfo2.getAppId(),recordInfo2.getAppId());
 			if(count==0) {
 				StringBuffer resultCode = new StringBuffer();

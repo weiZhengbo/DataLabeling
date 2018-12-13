@@ -5,6 +5,7 @@ import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
 import com.dataLabeling.service.impl.EntityTagService;
+import com.dataLabeling.util.CommonUtils;
 import com.dataLabeling.util.FileUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -125,25 +126,9 @@ public class EntityTagController {
     public Boolean exportResult(Integer appId,HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<RecordInfo> list = entityTagService.getNoTagList(appId, 0);
         //通过查询结果生成txt文件
-        //        HttpHeaders headers = new HttpHeaders();
-//        String fileName = URLEncoder.encode(file.getName(), "UTF-8");
-//        headers.setContentDispositionFormData("attachment", fileName);
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         File file = FileUtil.exportTxt(list);
-        OutputStream os  = null;
-        String fileName =  URLEncoder.encode(file.getName(), "UTF-8");
-        try {
-            os = response.getOutputStream();
-            response.reset();
-            response.setHeader("Content-Disposition", "attachment;filename="+fileName);
-            response.setContentType("application/octet-stream; charset=utf-8");
-            os.write(FileUtils.readFileToByteArray(file));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally{
-            IOUtils.closeQuietly(os);
-            file.delete();
-        }
+        String fileName = "实体标注结果.txt";
+        CommonUtils.downLoadFile(fileName,file,response);
         return true;
     }
 
