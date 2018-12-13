@@ -136,7 +136,7 @@ public class EntityTagController {
 //        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         OutputStream os  = null;
         File file = FileReadUtil.exportTxt(list);
-        String fileName =  URLEncoder.encode(file.getName(), "UTF-8");
+        String fileName =  URLEncoder.encode("实体标注结果.txt", "UTF-8");
         try {
             os = response.getOutputStream();
             response.reset();
@@ -147,6 +147,7 @@ public class EntityTagController {
             e.printStackTrace();
         }finally{
             IOUtils.closeQuietly(os);
+            file.delete();
         }
         return true;
     }

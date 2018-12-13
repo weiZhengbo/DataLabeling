@@ -98,27 +98,18 @@ public class FileReadUtil {
 
     public static File exportTxt(List<RecordInfo> list) throws IOException {
 
-        String filenameTemp = "D:\\实体标注结果.txt";
-        File filename = new File(filenameTemp);
-        if (!filename.exists()) {
-            //如果文件不存在则创建
-            filename.createNewFile();
-        }
+        File file = File.createTempFile("实体标注结果",".txt");
         // 文件路径
-        File file = new File(filenameTemp);
-        PrintWriter out = new PrintWriter(filenameTemp, "UTF-8");
+        PrintWriter out = new PrintWriter(file.getCanonicalPath(), "UTF-8");
         for(RecordInfo recordInfo:list){
-            System.out.println(recordInfo.getResultCode());
             for(int i = 0 ;i < recordInfo.getChatRecord().length();i++){
                 String[] str = recordInfo.getResultCode().split(" ");
-                System.out.println(recordInfo.getChatRecord().charAt(i));
                 out.print(recordInfo.getChatRecord().charAt(i)+"\t");
-                System.out.println(str[i]);
                 out.print(str[i]+"\r\n"); // \r\n即为换行
             }
             out.print("\r\n");
         }
-
+        System.out.println(file.getAbsolutePath());
         out.flush(); // 把缓存区内容压入文件
         out.close(); // 最后记得关闭文件
         return file;
