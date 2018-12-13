@@ -8,14 +8,13 @@ import java.io.File;
 public class UploadFileProcess {
     private static ExcelReader excelReader = new ExcelReader();
     private static CSVReader csvReader = new CSVReader();
-    public static void handle(String filePath, Integer appId, RecordService recordService){
+    public static void handle(String filePath, String originalName ,Integer appId, RecordService recordService){
         File file = new File(filePath);
-        String fileName = file.getName();
-        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String suffix = originalName.substring(originalName.lastIndexOf(".") + 1);
         if (suffix.equals("csv")){
-            csvReader.read(file,appId,recordService);
+            csvReader.read(file,originalName,appId,recordService);
         }else if (suffix.equals("xls")){
-            excelReader.readExcel(file,appId,recordService);
+            excelReader.readExcel(file,originalName,appId,recordService);
         }
     }
 }

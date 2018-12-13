@@ -1,14 +1,19 @@
 package com.dataLabeling.util;
 
+import com.dataLabeling.entity.SimilarRecord;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.OutputStream;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CommonUtils
 {
@@ -58,6 +63,68 @@ public class CommonUtils
             return new BigInteger(1, md.digest()).toString(16);
         } catch (Exception e) {
             throw new Exception("MD5加密出现错误，"+e.toString());
+        }
+    }
+
+    public static boolean isDigit(String str){
+        try {
+            Integer.parseInt(str);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public   static <T> List<List<T>> splitList(List<T> list , int groupSize){
+        int length = list.size();
+        // 计算可以分成多少组
+        int num = ( length + groupSize - 1 )/groupSize ; // TODO
+        List<List<T>> newList = new ArrayList<>(num);
+        for (int i = 0; i < num; i++) {
+            // 开始位置
+            int fromIndex = i * groupSize;
+            // 结束位置
+            int toIndex = (i+1) * groupSize < length ? ( i+1 ) * groupSize : length ;
+            newList.add(list.subList(fromIndex,toIndex)) ;
+        }
+        return  newList ;
+    }
+
+    public static int getInt(String pc) {
+        if(pc != null && !pc.trim().isEmpty()&& !pc.equals("null")) {
+            return Integer.parseInt(pc);
+        }
+        return 1;
+    }
+
+    public static int getOtherParam(String pctype) {
+        if(pctype != null && !pctype.trim().isEmpty()&&!pctype.equals("null")) {
+            return Integer.parseInt(pctype);
+        }
+        return -1;
+    }
+
+    public static String getOther(String type){
+        if (type!=null && !type.trim().isEmpty()&&!type.equals("null")){
+            return type;
+        }
+        return "";
+    }
+
+    public static void downLoadFile(String fileName,File file,HttpServletResponse response){
+        OutputStream os  = null;
+        try {
+            fileName =  URLEncoder.encode(fileName, "UTF-8");
+            os = response.getOutputStream();
+            response.reset();
+            response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+            response.setContentType("application/octet-stream; charset=utf-8");
+            os.write(FileUtils.readFileToByteArray(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            IOUtils.closeQuietly(os);
+            file.delete();
         }
     }
 }

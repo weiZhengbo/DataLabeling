@@ -18,7 +18,7 @@ public class ExcelReader {
 
     //读excel处理文件
     // 去读Excel的方法readExcel，该方法的入口参数为一个File对象
-    public void readExcel(File file,Integer appId,RecordService recordService) {
+    public void readExcel(File file,String originalName ,Integer appId,RecordService recordService) {
         try {
             ArrayList<RecordInfo> chatInfoparts = new ArrayList<>();
             GetOriginalInfo getOriginalInfo = new GetOriginalInfo();
@@ -84,7 +84,7 @@ public class ExcelReader {
                 customerName = sheet.getCell(originalCustomerColumn,i).getContents();
             }
 
-            ArrayList<RecordInfo> recordInfos = getOriginalInfo.dealDataDetail(detailInfo, file, originalId, date, customerName);
+            ArrayList<RecordInfo> recordInfos = getOriginalInfo.dealDataDetail(detailInfo,originalName, originalId, date, customerName);
             chatInfoparts.addAll(recordInfos);
             if (chatInfoparts.size()>10000){
                 recordService.addRecordBatch(chatInfoparts,appId);

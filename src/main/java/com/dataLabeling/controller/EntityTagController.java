@@ -5,18 +5,13 @@ import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
 import com.dataLabeling.service.impl.EntityTagService;
-import com.dataLabeling.util.FileReadUtil;
+import com.dataLabeling.util.FileUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,11 +56,11 @@ public class EntityTagController {
         List<String>  list=new ArrayList<String>();
         String fileName = file.getOriginalFilename();
         if(fileName.endsWith("txt")){
-            list=FileReadUtil.readTxt(f);
+            list= FileUtil.readTxt(f);
         }else if(fileName.endsWith("csv")){
-            list = FileReadUtil.readCsv(f);
+            list = FileUtil.readCsv(f);
         }else if(fileName.endsWith("xls") || fileName.endsWith("xlsx")) {
-            list = FileReadUtil.readExcel(f,fileName);
+            list = FileUtil.readExcel(f,fileName);
         }else{
             return "文件类型不正确！";
         }
@@ -134,8 +129,8 @@ public class EntityTagController {
 //        String fileName = URLEncoder.encode(file.getName(), "UTF-8");
 //        headers.setContentDispositionFormData("attachment", fileName);
 //        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        File file = FileUtil.exportTxt(list);
         OutputStream os  = null;
-        File file = FileReadUtil.exportTxt(list);
         String fileName =  URLEncoder.encode(file.getName(), "UTF-8");
         try {
             os = response.getOutputStream();
@@ -147,6 +142,7 @@ public class EntityTagController {
             e.printStackTrace();
         }finally{
             IOUtils.closeQuietly(os);
+            file.delete();
         }
         return true;
     }

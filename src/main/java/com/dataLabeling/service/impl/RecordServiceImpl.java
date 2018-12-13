@@ -5,6 +5,7 @@ import com.dataLabeling.entity.PageBean;
 import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
+import com.dataLabeling.util.CommonConstant;
 import com.dataLabeling.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class RecordServiceImpl implements RecordService {
     public void findAll(PageBean<RecordClass> pb, int clickwordId) {
         int tr = -1;
         String noHandledWord[] =  "".split("\\|");
-        if (pb.getDataType().equals("dealed")){
+        if (pb.getDataType().equals(CommonConstant.DATATYPE_DEALED)){
             if (clickwordId==-1){
                 tr = recordDao.selectCountDealed(pb.getAppId(), noHandledWord);
             }else {
@@ -37,7 +38,7 @@ public class RecordServiceImpl implements RecordService {
         pb.setTClass(recordClass);
 
         List<RecordInfo> beanList = null;
-        if (pb.getDataType().equals("dealed")){
+        if (pb.getDataType().equals(CommonConstant.DATATYPE_DEALED)){
             if (clickwordId==-1){
                 beanList = recordDao.selectNoClickDealedList(pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs(), noHandledWord);
             }else {
@@ -48,7 +49,7 @@ public class RecordServiceImpl implements RecordService {
         }
         pb.setBeanListUp(beanList);
 
-        if (clickwordId==-1||(clickwordId!=-1&&pb.getDataType().equals("dealed"))){
+        if (clickwordId==-1||(clickwordId!=-1&&pb.getDataType().equals(CommonConstant.DATATYPE_DEALED))){
             pb.setBeanListDown(null);
         }else {
             beanList = recordDao.selectclickedList(clickwordId,pb.getAppId(),(pb.getPc()-1)*pb.getPs1(),pb.getPs1());

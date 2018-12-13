@@ -16,9 +16,6 @@ import java.util.regex.Pattern;
  * 用于解析数据，提取原始id，原始时间戳，访客记录文本
  */
 public class GetOriginalInfo {
-    public static void main(String[] args) {
-
-    }
 
     /**
      * 获取满足pattern的列数
@@ -44,7 +41,7 @@ public class GetOriginalInfo {
      * @return
      * @throws ParseException
      */
-    public ArrayList<RecordInfo> dealDataDetail(String detailInfo, File file, Integer originalId, Date date,String customerName) throws ParseException {
+    public ArrayList<RecordInfo> dealDataDetail(String detailInfo, String originalName , Integer originalId, Date date,String customerName) throws ParseException {
         ArrayList<RecordInfo> chatInfoparts = new ArrayList<>();
         DateFormat formater1= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String patternStr1 = "(?s)访客问题>\\r\\n(.*?)\\r\\n(.*?)";
@@ -62,7 +59,7 @@ public class GetOriginalInfo {
                     continue;
                 }
                 RecordInfo recordInfo = new RecordInfo();
-                recordInfo.setFileName(file.getName());
+                recordInfo.setFileName(originalName);
                 recordInfo.setChatRecord(recordText);
                 recordInfo.setOriginId(originalId);
                 recordInfo.setRecordTime(date);
@@ -78,7 +75,7 @@ public class GetOriginalInfo {
                     continue;
                 }
                 RecordInfo recordInfo = new RecordInfo();
-                recordInfo.setFileName(file.getName());
+                recordInfo.setFileName(originalName);
                 recordInfo.setChatRecord(recordText);
                 recordInfo.setOriginId(originalId);
                 recordInfo.setRecordTime(formater1.parse(m.group(2)));
@@ -96,7 +93,7 @@ public class GetOriginalInfo {
                     continue;
                 }
                 RecordInfo recordInfo = new RecordInfo();
-                recordInfo.setFileName(file.getName());
+                recordInfo.setFileName(originalName);
                 recordInfo.setChatRecord(recordText);
                 recordInfo.setOriginId(originalId);
                 recordInfo.setRecordTime(formater1.parse(m.group(2)));

@@ -32,8 +32,9 @@
     </ul>
     <button class="btn bg-success" style="margin-top: 10px;" onclick="manageApplication()">所有标注项目管理</button>
     <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(1)">新增分类标注项目</button>
-    <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(2)">新增相似标注项目</button>
+    <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(2)">新增相似标注1项目</button>
     <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(3)">新增实体标注项目</button>
+    <button class="btn bg-success" style="margin-top: 10px;" onclick="addNewRecordClassProject(4)">新增相似标注2项目</button>
 </div>
 <div class="col-md-10" id="main">
     <iframe name="mainframe" id="mainframe" style="width: 100%" src="${pageContext.request.contextPath}/welcome.jsp" frameborder="0" scrolling="no"  onload="iFrameHeight('mainframe')"></iframe>

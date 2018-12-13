@@ -23,10 +23,10 @@
     </delete>
 
     <delete id="deleteInfo">
-        delete from recordInfo where appId=#{id}
+        delete from recordinfo where appId=#{id}
     </delete>
 
     <delete id="deleteClass">
-        delete from recordClass where appId=#{id}
+        delete from recordclass where appId=#{id}
     </delete>
 </mapper>

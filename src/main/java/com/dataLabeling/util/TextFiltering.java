@@ -13,6 +13,15 @@ public class TextFiltering implements Serializable {
         String a = "360";
         System.out.println(filter(a));
     }
+
+    public static String filter1(String text){
+        text = text.trim();
+        text = text.replaceAll("\n","");
+//        text = text.replaceAll("\'","");
+//        text = text.replaceAll("\"","");
+        return text;
+    }
+
     //用于过滤文本
     public static String filter(String text){
         //去掉前后空格

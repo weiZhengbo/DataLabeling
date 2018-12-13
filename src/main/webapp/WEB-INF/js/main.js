@@ -29,10 +29,12 @@ function showAppDetail(appId,that) {
     if(laststr == '分类标注'){
         var reqUrl = urlHead+"/RecordController/findAll?appId="+appId;
 
-    }else if(laststr == '相似标注'){
+    }else if(laststr == '相似标注1'){
         var reqUrl = urlHead+"/SimilarController/findAll?appId="+appId;
     }else if(laststr == '实体标注'){
         var reqUrl = urlHead+"/entityTag/getTaglist?appId="+appId+"&&dataType=-1";
+    }else if(laststr == '相似标注2'){
+        var reqUrl = urlHead+"/SimilarPair/findAll?appId="+appId;
     }
     $('#mainframe').attr('src',reqUrl);
     // window.location.href=reqUrl;
@@ -53,9 +55,11 @@ function addNewRecordClassProject(appType) {
         if(appType=='1'){
             appName=appName+'-分类标注';
         }else if(appType=='2'){
-            appName=appName+'-相似标注';
+            appName=appName+'-相似标注1';
         }else if(appType=='3'){
             appName=appName+'-实体标注';
+        }else if(appType=='4'){
+            appName=appName+'-相似标注2';
         }
         var reqUrl = urlHead+'/Application/addNewApplication?projectId='+pid+'&appType='+appType+'&appName='+appName;
         $.get(reqUrl,function (data) {

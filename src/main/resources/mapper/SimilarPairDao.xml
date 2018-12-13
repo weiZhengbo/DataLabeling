@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 写sql语句 -->
+<mapper namespace="com.dataLabeling.dao.SimilarPairDao">
+    <sql id="usedColumn">
+      id,isSimilar,visit_ques,match_ques,isValid,flag,type
+    </sql>
+   <insert id="batchInsert" parameterType="SimilarRecord">
+       insert IGNORE into similar_record(isSimilar,type,md5,visit_ques,match_ques,isValid,flag,appId,sync) values
+       <foreach collection="similarRecords" item="item" index="index" separator="," >
+           (#{item.isSimilar},#{item.type},#{item.md5},#{item.visit_ques},#{item.match_ques},#{item.isValid},#{item.flag},#{item.appId},#{item.sync})
+       </foreach>
+   </insert>
+    <select id="selectRecordNum"  resultType="Integer">
+        select count(*) from similar_record
+        WHERE appId = #{appId}
+        <if test="flag == 1">
+           AND flag = 1
+        </if>
+    </select>
+
+    <select id="selectRecord" resultType="SimilarRecord">
+        SELECT
+          <include refid="usedColumn"></include>
+        FROM similar_record
+        WHERE appId = #{appId}
+        <choose>
+            <when test="flag == 0">
+                limit #{start},#{num}
+            </when>
+            <when test="flag == 1">
+                and flag = 1 limit #{start},#{num}
+            </when>
+            <when test="flag == 2">
+                and flag = 0 and sync = 0 and isValid = 1
+                ORDER BY id limit #{num}
+            </when>
+        </choose>
+    </select>
+
+    <update id="updateSync">
+        UPDATE similar_record
+        SET sync = #{flag}
+        WHERE id in
+        <foreach collection="similarRecords" item="item" index="index" separator="," open=" ( " close=" ) ">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateIsSimilar" parameterType="SimilarRecord">
+        UPDATE similar_record
+        SET isSimilar = #{isSimilar},flag = 1
+        WHERE appId = #{appId} and id = #{id}
+    </update>
+
+
+    <update id="updateFlag">
+        UPDATE similar_record
+        SET flag = #{flag}
+        WHERE id in
+        <foreach collection="Ids" item="item" index="index" separator="," open=" ( " close=" ) ">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectAllDealedData" parameterType="Integer" resultType="SimilarRecord">
+        SELECT
+        <include refid="usedColumn"></include>
+        FROM similar_record
+        WHERE appId = #{appId}
+        AND flag = 1
+    </select>
+</mapper>

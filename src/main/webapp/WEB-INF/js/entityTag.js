@@ -11,14 +11,12 @@ $(document).ready(function () {
         var obj;
         var obj1;
         var text;
-        debugger;
         if(i%2==0){
             obj = $(this).find('div').eq(0);
             obj1 = $(this).find('div').eq(1);
             text=$(obj1).text();
             var kg = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+
                 "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
-            debugger;
             var reg = new RegExp(kg,"g");
             var html = text.replace(/O /g,"&nbsp&nbsp").replace("&nbspO","&nbsp&nbsp").replace(" O","&nbsp&nbsp")
                 .replace(reg,kg+"<br/>");
@@ -32,11 +30,11 @@ $(document).ready(function () {
  * 上传文件
  */
 function uploadFile(){
-    debugger;
         var form = new FormData(document.getElementById("fileUpload"));
         $.ajax({
             type: "POST",
-            url:"fileUpload.action",
+            // url:"fileUpload.action",
+            url:"http://localhost/DataLabeling/SimilarPair/fileUpload",
             data:form,
             cache: false,
             contentType: false,
@@ -135,7 +133,6 @@ function getSelect(id,infoId) {
         start=0;
         end=text.length;
     }
-    debugger;
     if (text.substring(start, end) != selecter.toString().trim()) {
         return;
     }
@@ -157,7 +154,6 @@ function getSelect(id,infoId) {
     if(classCode!=null && classCode!="") {
         sub = "-"+classCode;
     }
-    debugger;
     for (var i = 0; i < resultCode.length; i++) {
         if (i < start || i > end - 1) {
             result += resultCode[i];
@@ -170,7 +166,6 @@ function getSelect(id,infoId) {
             result += ' '
         }
     }
-    debugger;
     var kg = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+
         "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
     var reg = new RegExp(kg,"g");

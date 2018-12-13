@@ -18,6 +18,10 @@ public class SimilarRecord {
 
     private Integer appId;
 
+    private Integer sync;
+
+    private String  md5;
+
     public Integer getId() {
         return id;
     }
@@ -81,4 +85,21 @@ public class SimilarRecord {
     public void setAppId(Integer appId) {
         this.appId = appId;
     }
+
+    public Integer getSync() {
+        return sync;
+    }
+
+    public void setSync(Integer sync) {
+        this.sync = sync;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
 }

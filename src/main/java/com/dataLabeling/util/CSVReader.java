@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class CSVReader{
     //读csv文件进行处理
-    public void read(File file,Integer appId,RecordService recordService){
+    public void read(File file,String originalName ,Integer appId,RecordService recordService){
         ArrayList<RecordInfo> chatInfoparts = new ArrayList<>();
         String filePath = file.getAbsolutePath();
         try {
@@ -73,7 +73,7 @@ public class CSVReader{
                 if (originalCustomerColumn!=-1){
                     customerName = csvReader.get(originalCustomerColumn);
                 }
-                ArrayList<RecordInfo> recordInfos = getOriginalInfo.dealDataDetail(detailInfo, file, originalId, date, customerName);
+                ArrayList<RecordInfo> recordInfos = getOriginalInfo.dealDataDetail(detailInfo, originalName, originalId, date, customerName);
                 chatInfoparts.addAll(recordInfos);
                 if (chatInfoparts.size()>10000){
                     recordService.addRecordBatch(chatInfoparts,appId);

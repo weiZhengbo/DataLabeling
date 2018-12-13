@@ -2,6 +2,7 @@ package com.dataLabeling.controller;
 
 import com.dataLabeling.entity.*;
 import com.dataLabeling.service.RecordService;
+import com.dataLabeling.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,15 +31,15 @@ public class RecordController {
     @RequestMapping("/findAll")
     public String findAll(QueryVO vo, Model model){
         PageBean<RecordClass> pb = new PageBean<>();
-        int pc = getInt(vo.getPc());
-        String keyword = getOther(vo.getKeyword());
-        String dataType = getOther(vo.getDataType());
+        int pc = CommonUtils.getInt(vo.getPc());
+        String keyword = CommonUtils.getOther(vo.getKeyword());
+        String dataType = CommonUtils.getOther(vo.getDataType());
         if (dataType.equals("")) {
             dataType = "notdeal";
         }
-        int appId = getOtherParam(vo.getAppId());
-        int clickwordId = getOtherParam(vo.getClickwordId());
-        String refresh = getOther(vo.getRefresh());
+        int appId = CommonUtils.getOtherParam(vo.getAppId());
+        int clickwordId = CommonUtils.getOtherParam(vo.getClickwordId());
+        String refresh = CommonUtils.getOther(vo.getRefresh());
         if (refresh.equals("")){
             refresh="yes";
         }
@@ -154,25 +155,4 @@ public class RecordController {
         return recordClass;
     }
 
-
-    private int getInt(String pc) {
-        if(pc != null && !pc.trim().isEmpty()&& !pc.equals("null")) {
-            return Integer.parseInt(pc);
-        }
-        return 1;
-    }
-
-    private int getOtherParam(String pctype) {
-        if(pctype != null && !pctype.trim().isEmpty()&&!pctype.equals("null")) {
-            return Integer.parseInt(pctype);
-        }
-        return -1;
-    }
-
-    private String getOther(String type){
-        if (type!=null && !type.trim().isEmpty()&&!type.equals("null")){
-            return type;
-        }
-        return "";
-    }
 }
