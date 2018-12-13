@@ -6,6 +6,7 @@ import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
 import com.dataLabeling.service.SimilarService;
+import com.dataLabeling.util.CommonConstant;
 import com.dataLabeling.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,14 +43,14 @@ public class SimilarController {
         int pc = CommonUtils.getInt(vo.getPc());
         String keyword = CommonUtils.getOther(vo.getKeyword());
         String dataType = CommonUtils.getOther(vo.getDataType());
-        if (dataType.equals("")) {
-            dataType = "notdeal";
+        if (dataType.isEmpty()) {
+            dataType = CommonConstant.DATATYPE_NOTDEAL;
         }
         int appId = CommonUtils.getOtherParam(vo.getAppId());
         int clickwordId = CommonUtils.getOtherParam(vo.getClickwordId());
         String refresh = CommonUtils.getOther(vo.getRefresh());
-        if (refresh.equals("")){
-            refresh="yes";
+        if (refresh.isEmpty()){
+            refresh=CommonConstant.REFRESH_YES;
         }
         String noHandledWord = CommonUtils.getOther(vo.getNoHandledWord());
         int ps = 10;
@@ -64,7 +65,7 @@ public class SimilarController {
         similarService.findAll(pb,clickwordId);
 
 
-        if (keyword.equals("")) {
+        if (keyword.isEmpty()) {
             List<RecordClass> recordClasses = recordService.findAllClasses(appId);
             pb.setTClasses(recordClasses);
         } else {
@@ -73,20 +74,22 @@ public class SimilarController {
             pb.setTClasses(recordClasses);
         }
 
-        if (refresh.equals("yes")){
-            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute("SSData");
+        if (refresh.equals(CommonConstant.REFRESH_YES)){
+            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute(CommonConstant.SESSION_NAME);
             if (mp==null){
                 mp = new HashMap<>();
             }
-            if (pb.getBeanListUp()==null||pb.getBeanListUp().size()==0){
+            mp.put(pb.getAppId(),pb.getBeanListUp());
+            req.getSession().setAttribute(CommonConstant.SESSION_NAME,mp);
+         /*   if (pb.getBeanListUp()==null||pb.getBeanListUp().size()==0){
                 mp.put(pb.getAppId(),pb.getBeanListUp());
                 req.getSession().setAttribute("SSData",mp);
             }else {
                 mp.put(pb.getAppId(),pb.getBeanListUp());
                 req.getSession().setAttribute("SSData",mp);
-            }
-        }else if (refresh.equals("no")){
-            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute("SSData");
+            }*/
+        }else if (refresh.equals(CommonConstant.REFRESH_NO)){
+            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute(CommonConstant.SESSION_NAME);
             if (mp==null){
                 mp = new HashMap<>();
             }
@@ -95,7 +98,7 @@ public class SimilarController {
 
                 }else {
                     mp.put(pb.getAppId(),pb.getBeanListUp());
-                    req.getSession().setAttribute("SSData",mp);
+                    req.getSession().setAttribute(CommonConstant.SESSION_NAME,mp);
                 }
             }else {
                 List<RecordInfo> recordInfos = (List<RecordInfo>) mp.get(pb.getAppId());
@@ -103,9 +106,13 @@ public class SimilarController {
                 for (RecordInfo recordInfo:recordInfos){
                     rids.add(recordInfo.getId());
                 }
-                List<RecordInfo> records = recordService.findRecordsByIds(rids);
-                mp.put(pb.getAppId(),records);
-                req.getSession().setAttribute("SSData",mp);
+                if (rids.size()==0){
+                    mp.put(pb.getAppId(),pb.getBeanListUp());
+                }else {
+                    List<RecordInfo> records = recordService.findRecordsByIds(rids);
+                    mp.put(pb.getAppId(),records);
+                }
+                req.getSession().setAttribute(CommonConstant.SESSION_NAME,mp);
             }
         }
         model.addAttribute("pb", pb);

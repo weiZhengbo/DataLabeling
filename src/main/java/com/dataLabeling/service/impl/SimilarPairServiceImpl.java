@@ -94,10 +94,14 @@ public class SimilarPairServiceImpl implements SimilarPairService {
     }
 
     @Override
-    public List<SimilarRecord> download(Integer appId, Integer dataType) {
-        List<SimilarRecord> rs = null;
-        if (dataType == 1)
-            rs =  similarPairDao.selectAllDealedData(appId);
+    public List<String> download(Integer appId, Integer dataType) {
+        List<String> rs = new ArrayList<>();
+        if (dataType == 1){
+            List<SimilarRecord> similarRecords = similarPairDao.selectAllDealedData(appId);
+            for(SimilarRecord similarRecord:similarRecords){
+                rs.add(similarRecord.getId()+"\t"+similarRecord.getType()+"\t"+similarRecord.getVisit_ques()+"\t"+similarRecord.getMatch_ques()+"\t"+similarRecord.getIsSimilar());
+            }
+        }
         return rs;
     }
 }

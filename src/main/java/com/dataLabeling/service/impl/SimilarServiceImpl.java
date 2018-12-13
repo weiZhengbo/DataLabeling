@@ -6,6 +6,7 @@ import com.dataLabeling.entity.PageBean;
 import com.dataLabeling.entity.RecordClass;
 import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.SimilarService;
+import com.dataLabeling.util.CommonConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class SimilarServiceImpl implements SimilarService {
     public void findAll(PageBean<RecordClass> pb, int clickwordId) {
         int tr = -1;
         String noHandledWord[] =  pb.getNoHandledWord().split("\\|");
-        if (pb.getDataType().equals("dealed")){
+        if (pb.getDataType().equals(CommonConstant.DATATYPE_DEALED)){
             if (clickwordId==-1){
                 tr = recordDao.selectCountDealed(pb.getAppId(),noHandledWord);
             }else {
@@ -38,14 +39,14 @@ public class SimilarServiceImpl implements SimilarService {
         pb.setTClass(recordClass);
 
         List<RecordInfo> beanList = null;
-        if (pb.getDataType().equals("dealed")){
+        if (pb.getDataType().equals(CommonConstant.DATATYPE_DEALED)){
             if (clickwordId==-1){
                 beanList = recordDao.selectNoClickDealedList(pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs(),noHandledWord);
             }else {
                 beanList = recordDao.selectclickedList(clickwordId,pb.getAppId(),(pb.getPc()-1)*pb.getPs(),pb.getPs());
             }
         }else {
-            if (pb.getNoHandledWord()==null||pb.getNoHandledWord().equals("")){
+            if (pb.getNoHandledWord()==null||pb.getNoHandledWord().isEmpty()){
                 beanList = recordDao.selectNotDealedList(pb.getAppId(),pb.getPs());
             }else {
                 beanList = similarDao.selectNotDealedAndSearchedList(pb.getAppId(),pb.getPs(),noHandledWord);
@@ -53,7 +54,7 @@ public class SimilarServiceImpl implements SimilarService {
         }
         pb.setBeanListUp(beanList);
 
-        if (clickwordId==-1||(clickwordId!=-1&&pb.getDataType().equals("dealed"))){
+        if (clickwordId==-1||(clickwordId!=-1&&pb.getDataType().equals(CommonConstant.DATATYPE_DEALED))){
             pb.setBeanListDown(null);
         }else {
             beanList = recordDao.selectclickedList(clickwordId,pb.getAppId(),(pb.getPc()-1)*pb.getPs1(),pb.getPs1());

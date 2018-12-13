@@ -111,7 +111,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void addRecordBatch(ArrayList<RecordInfo> chatInfoparts, Integer appId) {
+    public void addRecordBatch(List<RecordInfo> chatInfoparts, Integer appId) {
         for (RecordInfo recordInfo:chatInfoparts){
             recordInfo.setAppId(appId);
             try {
@@ -126,7 +126,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<Map<String, Object>> queryInfoDatas(Integer appId, String downType, String choosedIds) {
         List<Map<String, Object>> mapList = new ArrayList<>();
-        if (downType.equals("1")){
+        if ("1".equals(downType)){
             String[] ids = choosedIds.split(",");
             for (String val:ids){
                 if (val.equals("")){
@@ -135,9 +135,9 @@ public class RecordServiceImpl implements RecordService {
                 List<Map<String, Object>> tempMapList=recordDao.selectDealedById(val);
                 mapList.addAll(tempMapList);
             }
-        }else if (downType.equals("2")){
+        }else if ("2".equals(downType)){
             mapList= recordDao.selectAllDealedData(appId);
-        }else if (downType.equals("3")){
+        }else if ("3".equals(downType)){
             mapList=recordDao.selectAllData(appId);
         }
         return mapList;
@@ -147,5 +147,33 @@ public class RecordServiceImpl implements RecordService {
     public String selectRecordClassById(Integer sid) {
         RecordClass recordClass = recordDao.selectRecordClassById(sid);
         return recordClass.getRecordClass();
+    }
+
+    @Override
+    public List<String> querySimilarDatas(Integer appId, String downType, String keyword, String clickwordId) {
+        List<String> list= new ArrayList<>();
+        List<Integer> allSimilarId =  new ArrayList<>();
+        if ("1".equals(downType)){
+            allSimilarId.add(Integer.parseInt(clickwordId));
+        }else if ("2".equals(downType)){
+            List<RecordClass> matchClasses = findMatchClasses(appId, keyword);
+            for (RecordClass recordClass:matchClasses){
+                allSimilarId.add(recordClass.getId());
+            }
+        }else if ("3".equals(downType)){
+            List<RecordClass> allClasses = findAllClasses(appId);
+            for (RecordClass recordClass:allClasses){
+                allSimilarId.add(recordClass.getId());
+            }
+        }
+        for (Integer sid:allSimilarId){
+            List<RecordInfo> similarClassRecord = findRecordsById(sid);
+            for (int i=0;i<similarClassRecord.size();i++){
+                for (int j=i+1;j<similarClassRecord.size();j++){
+                    list.add("1\t"+similarClassRecord.get(i).getChatRecord()+"\t"+similarClassRecord.get(j).getChatRecord());
+                }
+            }
+        }
+        return list;
     }
 }

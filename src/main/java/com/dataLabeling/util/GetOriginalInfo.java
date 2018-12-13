@@ -22,7 +22,7 @@ public class GetOriginalInfo {
      * @param titles
      * @return 如果有返回列数，否则返回-1
      */
-    public Integer GetColumn(String[] titles,String pattern){
+    public static Integer GetColumn(String[] titles,String pattern){
         for (int i=0;i<titles.length;i++){
             if (titles[i].matches(pattern)){
                 return i;
@@ -34,14 +34,13 @@ public class GetOriginalInfo {
     /**
      * 处理访客记录文本详细，返回访客文本记录对象列表
      * @param detailInfo
-     * @param file
      * @param originalId
      * @param date
      * @param customerName
      * @return
      * @throws ParseException
      */
-    public ArrayList<RecordInfo> dealDataDetail(String detailInfo, String originalName , Integer originalId, Date date,String customerName) throws ParseException {
+    public static ArrayList<RecordInfo> dealDataDetail(String detailInfo, String originalName , Integer originalId, Date date,String customerName) throws ParseException {
         ArrayList<RecordInfo> chatInfoparts = new ArrayList<>();
         DateFormat formater1= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String patternStr1 = "(?s)访客问题>\\r\\n(.*?)\\r\\n(.*?)";
@@ -55,7 +54,7 @@ public class GetOriginalInfo {
             m = r.matcher(detailInfo);
             while (m.find()) {
                 String recordText = TextFiltering.filter(m.group(1));
-                if (recordText.equals("")||recordText.equals(" ")){
+                if (recordText.isEmpty()||recordText.equals(" ")){
                     continue;
                 }
                 RecordInfo recordInfo = new RecordInfo();
@@ -71,7 +70,7 @@ public class GetOriginalInfo {
             m = r.matcher(detailInfo);
             while (m.find()) {
                 String recordText = TextFiltering.filter(m.group(4));
-                if (recordText.equals("")||recordText.equals(" ")){
+                if (recordText.isEmpty()||recordText.equals(" ")){
                     continue;
                 }
                 RecordInfo recordInfo = new RecordInfo();
@@ -89,7 +88,7 @@ public class GetOriginalInfo {
             m = r.matcher(detailInfo);
             while (m.find()) {
                 String recordText = TextFiltering.filter(m.group(4));
-                if (recordText.equals("")||recordText.equals(" ")){
+                if (recordText.isEmpty()||recordText.equals(" ")){
                     continue;
                 }
                 RecordInfo recordInfo = new RecordInfo();

@@ -9,11 +9,13 @@ import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.zip.ZipOutputStream;
 
 public class CommonUtils
 {
@@ -66,6 +68,11 @@ public class CommonUtils
         }
     }
 
+    /**
+     * 判断是否是数字
+     * @param str
+     * @return
+     */
     public static boolean isDigit(String str){
         try {
             Integer.parseInt(str);
@@ -75,6 +82,13 @@ public class CommonUtils
         }
     }
 
+    /**
+     * 按照groupsize切分list
+     * @param list
+     * @param groupSize
+     * @param <T>
+     * @return
+     */
     public   static <T> List<List<T>> splitList(List<T> list , int groupSize){
         int length = list.size();
         // 计算可以分成多少组
@@ -111,6 +125,12 @@ public class CommonUtils
         return "";
     }
 
+    /**
+     * 下载普通文件
+     * @param fileName
+     * @param file
+     * @param response
+     */
     public static void downLoadFile(String fileName,File file,HttpServletResponse response){
         OutputStream os  = null;
         try {
@@ -125,6 +145,33 @@ public class CommonUtils
         }finally{
             IOUtils.closeQuietly(os);
             file.delete();
+        }
+    }
+
+    /**
+     * 下载zip文件
+     * @param zipName
+     * @param files
+     * @param response
+     */
+    public static void downLoadZipFile(String zipName,List<File> files,HttpServletResponse response){
+        response.setHeader("Content-Disposition","attachment; filename="+zipName);
+        response.setContentType("multipart/form-data");
+        ZipOutputStream out = null;
+        try {
+            out = new ZipOutputStream(response.getOutputStream());
+            for (File file:files){
+                ZipUtils.doCompress(file.getPath(), out);
+                response.flushBuffer();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

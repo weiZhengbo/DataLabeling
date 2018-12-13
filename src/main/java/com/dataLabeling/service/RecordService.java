@@ -37,10 +37,12 @@ public interface RecordService {
     void addnewRecordClass(RecordClass recordClass);
 
     //批量添加record
-    void addRecordBatch(ArrayList<RecordInfo> chatInfoparts, Integer appId);
+    void addRecordBatch(List<RecordInfo> chatInfoparts, Integer appId);
 
     //查询record数据
     List<Map<String,Object>> queryInfoDatas(Integer appId, String downType, String choosedIds);
 
     String selectRecordClassById(Integer sid);
+
+    List<String> querySimilarDatas(Integer appId, String downType, String keyword, String clickwordId);
 }

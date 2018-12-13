@@ -19,5 +19,5 @@ public interface SimilarPairService {
 
     Boolean updateFlag(List<Integer> recordData, int flag);
 
-    List<SimilarRecord> download(Integer appId, Integer dataType);
+    List<String> download(Integer appId, Integer dataType);
 }

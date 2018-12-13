@@ -82,16 +82,16 @@ function downLoadData(type) {
             alert('当前没有选择相似记录范本');
             return;
         }
-        var reqUrl = head + '/DownLoadZipFileController/downLoadsimilarFile?appId=' + appId + '&downType=1' + '&clickwordId=' + clickwordId;
+        var reqUrl = head + '/DownLoadZipFileController/downLoadsimilarFile?appId=' + appId + '&downType=1' + '&clickwordId=' + clickwordId+ '&keyword=';
     } else if (type == '2') {
         var keyword = getQueryString(url, 'keyword');
         if (keyword == null || keyword == 'null' || keyword == '') {
             alert('当前没有选择搜索的相似记录范本');
             return;
         }
-        var reqUrl = head + '/DownLoadZipFileController/downLoadsimilarFile?appId=' + appId + '&downType=2' + '&keyword=' + keyword;
+        var reqUrl = head + '/DownLoadZipFileController/downLoadsimilarFile?appId=' + appId + '&downType=2' + '&keyword=' + keyword+ '&clickwordId=';
     } else if (type == '3') {
-        var reqUrl = head + '/DownLoadZipFileController/downLoadsimilarFile?appId=' + appId + '&downType=3';
+        var reqUrl = head + '/DownLoadZipFileController/downLoadsimilarFile?appId=' + appId + '&downType=3'+ '&clickwordId=&keyword=';
     }
     window.location.href = reqUrl;
 }

@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -108,7 +109,6 @@ public class FileUtil {
      */
     public static List<SimilarRecord>  readCsv2(File file,Integer appId){
         List<SimilarRecord> list = new ArrayList<>();
-        List<String> result = new ArrayList<String>();
         GetOriginalInfo getOriginalInfo = new GetOriginalInfo();
         String patternStr1 = "(?s)(访客问题>\\r\\n.*?)(\\r\\n\\r\\n|$)";
         Pattern r1 =  Pattern.compile(patternStr1);
@@ -245,33 +245,24 @@ public class FileUtil {
     }
 
     public static File exportTxt(List<RecordInfo> list) throws IOException {
-        String filenameTemp = "D:\\实体标注结果.txt";
-        File filename = new File(filenameTemp);
-        if (!filename.exists()) {
-            //如果文件不存在则创建
-            filename.createNewFile();
-        }
+        File file = File.createTempFile("实体标注结果",".txt");
         // 文件路径
-        File file = new File(filenameTemp);
-        PrintWriter out = new PrintWriter(filenameTemp, "UTF-8");
+        PrintWriter out = new PrintWriter(file.getCanonicalPath(), "UTF-8");
         for(RecordInfo recordInfo:list){
-            System.out.println(recordInfo.getResultCode());
             for(int i = 0 ;i < recordInfo.getChatRecord().length();i++){
                 String[] str = recordInfo.getResultCode().split(" ");
-                System.out.println(recordInfo.getChatRecord().charAt(i));
                 out.print(recordInfo.getChatRecord().charAt(i)+"\t");
-                System.out.println(str[i]);
                 out.print(str[i]+"\r\n"); // \r\n即为换行
             }
             out.print("\r\n");
         }
-
+        System.out.println(file.getAbsolutePath());
         out.flush(); // 把缓存区内容压入文件
         out.close(); // 最后记得关闭文件
         return file;
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         long l = System.currentTimeMillis();
         File file = new File("C:\\Users\\live800\\Downloads\\chat-content1.csv");
         List<SimilarRecord> similarRecords = FileUtil.readCsv2(file, 8);
@@ -292,20 +283,53 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+
+
+    /**
+     * 存储info.txt文件
+     * id，访客记录文本，类别标签
+     * 字段分割符为||
+     * 行分隔符为\r\n
+     *
+     * 存储detail.txt文件
+     * id，原始id，访客记录文本，文件名，原始时间戳
+     * 字段分割符为||
+     * 行分隔符为\r\n
+     */
+    public static List<File> storeRecordInfoFile( List<Map<String, Object>> mapList) throws IOException {
+        List<File> files = new ArrayList<>();
+        File infoFile = File.createTempFile("info",".txt");
+        File detailFile = File.createTempFile("detail",".txt");
+        files.add(infoFile);
+        files.add(detailFile);
+        try {
+            PrintWriter infoWriter = new PrintWriter(infoFile, "UTF-8");
+            PrintWriter detailWriter = new PrintWriter(detailFile, "UTF-8");
+            for (Map l:mapList){
+                String info = l.get("id")+"||"+l.get("chatRecord")+"||"+l.get("recordClass");
+                String detail = l.get("id")+"||"+l.get("originId")+"||"+l.get("chatRecord")+"||"+l.get("fileName")+"||"+l.get("recordTime");
+                infoWriter.println(info);
+                detailWriter.println(detail);
+            }
+            infoWriter.flush();
+            detailWriter.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return files;
     }
 
-    public static File exportSimilarPairTxt(List<SimilarRecord> similarRecords) throws IOException {
-        File filename = File.createTempFile("标注结果","txt");
-        if (!filename.exists()) {
-            //如果文件不存在则创建
-            filename.createNewFile();
-        }
-        PrintWriter out = new PrintWriter(filename, "UTF-8");
-        for(SimilarRecord similarRecord:similarRecords){
-            out.println(similarRecord.getId()+"\t"+similarRecord.getType()+"\t"+similarRecord.getVisit_ques()+"\t"+similarRecord.getMatch_ques()+"\t"+similarRecord.getIsSimilar());
+    public static File storeSingleFile(List<String> list) throws IOException {
+        File file = File.createTempFile("tmp",".txt");
+        PrintWriter out = new PrintWriter(file, "UTF-8");
+        for(String item:list){
+            out.println(item);
         }
         out.flush(); // 把缓存区内容压入文件
         out.close(); // 最后记得关闭文件
-        return filename;
+        return file;
     }
 }

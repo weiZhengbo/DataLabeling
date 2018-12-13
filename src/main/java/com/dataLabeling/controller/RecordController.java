@@ -2,6 +2,7 @@ package com.dataLabeling.controller;
 
 import com.dataLabeling.entity.*;
 import com.dataLabeling.service.RecordService;
+import com.dataLabeling.util.CommonConstant;
 import com.dataLabeling.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,14 +35,14 @@ public class RecordController {
         int pc = CommonUtils.getInt(vo.getPc());
         String keyword = CommonUtils.getOther(vo.getKeyword());
         String dataType = CommonUtils.getOther(vo.getDataType());
-        if (dataType.equals("")) {
-            dataType = "notdeal";
+        if (dataType.isEmpty()) {
+            dataType = CommonConstant.DATATYPE_NOTDEAL;
         }
         int appId = CommonUtils.getOtherParam(vo.getAppId());
         int clickwordId = CommonUtils.getOtherParam(vo.getClickwordId());
         String refresh = CommonUtils.getOther(vo.getRefresh());
-        if (refresh.equals("")){
-            refresh="yes";
+        if (refresh.isEmpty()){
+            refresh=CommonConstant.REFRESH_YES;
         }
         int ps = 10;
         int ps1 = 5;
@@ -53,7 +54,7 @@ public class RecordController {
         pb.setPs1(ps1);
         recordService.findAll(pb,clickwordId);
 
-        if (keyword.equals("")) {
+        if (keyword.isEmpty()) {
             List<RecordClass> recordClasses = recordService.findAllClasses(appId);
             pb.setTClasses(recordClasses);
         } else {
@@ -62,19 +63,21 @@ public class RecordController {
             pb.setTClasses(recordClasses);
         }
 
-        if (refresh.equals("yes")){
-            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute("SSData");
+        if (refresh.equals(CommonConstant.REFRESH_YES)){
+            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute(CommonConstant.SESSION_NAME);
             if (mp==null){
                 mp = new HashMap<>();
             }
-            if (pb.getBeanListUp()==null||pb.getBeanListUp().size()==0){
+            mp.put(pb.getAppId(),pb.getBeanListUp());
+            req.getSession().setAttribute(CommonConstant.SESSION_NAME,mp);
+            /*if (pb.getBeanListUp()==null||pb.getBeanListUp().size()==0){
 
             }else {
                 mp.put(pb.getAppId(),pb.getBeanListUp());
                 req.getSession().setAttribute("SSData",mp);
-            }
-        }else if (refresh.equals("no")){
-            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute("SSData");
+            }*/
+        }else if (refresh.equals(CommonConstant.REFRESH_NO)){
+            HashMap<Integer,Object> mp = (HashMap<Integer, Object>) req.getSession().getAttribute(CommonConstant.SESSION_NAME);
             if (mp==null){
                 mp = new HashMap<>();
             }
@@ -83,7 +86,7 @@ public class RecordController {
 
                 }else {
                     mp.put(pb.getAppId(),pb.getBeanListUp());
-                    req.getSession().setAttribute("SSData",mp);
+                    req.getSession().setAttribute(CommonConstant.SESSION_NAME,mp);
                 }
             }else {
                 List<RecordInfo> recordInfos = (List<RecordInfo>) mp.get(pb.getAppId());
@@ -91,9 +94,13 @@ public class RecordController {
                 for (RecordInfo recordInfo:recordInfos){
                     rids.add(recordInfo.getId());
                 }
-                List<RecordInfo> records = recordService.findRecordsByIds(rids);
-                mp.put(pb.getAppId(),records);
-                req.getSession().setAttribute("SSData",mp);
+                if (rids.size()==0){
+                    mp.put(pb.getAppId(),pb.getBeanListUp());
+                }else {
+                    List<RecordInfo> records = recordService.findRecordsByIds(rids);
+                    mp.put(pb.getAppId(),records);
+                }
+                req.getSession().setAttribute(CommonConstant.SESSION_NAME,mp);
             }
         }
         model.addAttribute("pb", pb);

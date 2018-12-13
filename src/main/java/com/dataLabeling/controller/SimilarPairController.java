@@ -74,8 +74,8 @@ public class SimilarPairController {
     @RequestMapping("download")
     @ResponseBody
     public Boolean download(@RequestParam("appId") Integer appId,@RequestParam("dataType")Integer dataType ) throws IOException {
-        List<SimilarRecord> similarRecords = similarPairService.download(appId,dataType);
-        File file = FileUtil.exportSimilarPairTxt(similarRecords);
+        List<String> list = similarPairService.download(appId,dataType);
+        File file = FileUtil.storeSingleFile(list);
         String fileName =  "标注结果.txt";
         CommonUtils.downLoadFile(fileName,file,response);
         return true;

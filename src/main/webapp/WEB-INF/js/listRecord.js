@@ -118,10 +118,10 @@ function downLoadData(type) {
         sessionStorage.clear();
         window.location.href=reqUrl;
     }else if(type=='2'){
-        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=2';
+        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=2&choosedIds=';
         window.location.href=reqUrl;
     }else {
-        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=3';
+        var reqUrl = head+'/DownLoadZipFileController/downLoadZipFile?appId='+appId+'&downType=3&choosedIds=';
         window.location.href=reqUrl;
     }
 }

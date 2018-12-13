@@ -1,17 +1,29 @@
 package com.dataLabeling.util;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextFiltering implements Serializable {
-
-    public static void main(String[] args) {
-        String a = "360";
-        System.out.println(filter(a));
+    private static List<String> uselessList = null;
+    static {
+        uselessList = new ArrayList<>();
+        File useless = new File(TextFiltering.class.getResource("/useless.txt").getFile());
+        BufferedReader reader = null;
+        try {
+            FileInputStream fis = new FileInputStream(useless);
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            reader = new BufferedReader(isr);
+            String tempString = null;
+            while ((tempString = reader.readLine()) != null) {
+                uselessList.add(tempString);
+            }
+            reader.close();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public static String filter1(String text){
@@ -35,19 +47,8 @@ public class TextFiltering implements Serializable {
         String urlPatternStr = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
         text = text.replaceAll(urlPatternStr, "");
         //过无用词进行过滤 利用useless.txt文件
-        String uselessPath = TextFiltering.class.getResource("/useless.txt").toString().substring(6);
-        BufferedReader reader = null;
-        try {
-            FileInputStream fis = new FileInputStream(uselessPath);
-            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-            reader = new BufferedReader(isr);
-            String tempString = null;
-            while ((tempString = reader.readLine()) != null) {
-                text = text.replace(tempString,"");
-            }
-            reader.close();
-        }catch (Exception e){
-            throw new RuntimeException(e);
+        for (String str:uselessList){
+            text = text.replace(str,"");
         }
         //过滤文本开始和结束的标点
         String pattern = "^(\\*|,|，|。|\\.|\\?|？|!|！|、)+(.*)";

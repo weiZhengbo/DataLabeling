@@ -1,5 +1,6 @@
 package com.dataLabeling.controller;
 
+import com.dataLabeling.entity.RecordInfo;
 import com.dataLabeling.service.RecordService;
 import com.dataLabeling.util.UploadFileProcess;
 import org.apache.commons.fileupload.FileItem;
@@ -38,7 +39,10 @@ public class UploadHandleController {
         try{
             DiskFileItem fi = (DiskFileItem)file.getFileItem();
             File f = fi.getStoreLocation();
-            UploadFileProcess.handle(f.getAbsolutePath(),file.getOriginalFilename(),appId,recordService);
+            List<List<RecordInfo>> recordInfoList = UploadFileProcess.handle(f.getAbsolutePath(),file.getOriginalFilename());
+            for (int i=0;i<recordInfoList.size();i++){
+                recordService.addRecordBatch(recordInfoList.get(i),appId);
+            }
         }catch (Exception e){
             return false;
         }
