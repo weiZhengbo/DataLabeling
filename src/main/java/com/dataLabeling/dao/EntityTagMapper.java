@@ -10,7 +10,7 @@ public interface EntityTagMapper {
 
 	List<String> getList();
 
-	public void saveFileContent(RecordInfo recordInfo);
+	public void saveFileContent(@Param("recordInfoList") List<RecordInfo> recordInfoList);
 
     public List<RecordInfo> getNoTagList(@Param("appId") Integer appId,@Param("dataType") Integer dataType);
 

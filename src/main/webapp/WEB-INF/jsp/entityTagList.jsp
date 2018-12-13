@@ -125,5 +125,10 @@
     </c:if>
 </div>
 </body>
+<script type="application/javascript" >
+    $(document).ready(function () {
+        alert(${dataType})
+    });
+</script>
 
 </html>
